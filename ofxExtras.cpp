@@ -212,12 +212,18 @@ string ofxToString(char ch){
 	return sstr.str();
 }
 
+string ofxToString(unsigned char ch){
+	stringstream sstr;
+	sstr << ch;
+	return sstr.str();
+}
+
 string ofxToString(string str){
 	return str; //no conversion but for sake of completeness. Is ie. used by template in ofxIniSettings
 }
 
 string ofxToString(float f) {
-    return ofToString(f); 
+    return ofToString(f);
 }
 
 string ofxToString(bool value){
@@ -395,7 +401,7 @@ string ofxGetSerialString(ofSerial &serial, char until) {
     char ch;
     int ttl=1000;
     while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-      ss << ch;   
+      ss << ch;
     }
     str+=ss.str();
     if (ch==until) {

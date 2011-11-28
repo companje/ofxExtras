@@ -16,6 +16,7 @@ string ofxToString(bool value);
 string ofxToString(ofRectangle value);
 string ofxToString(string str);
 string ofxToString(char ch);
+string ofxToString(unsigned char ch);
 string ofxToString(float f);
 string ofxToString(ofQuaternion q);
 string ofxToString(ofColor c);
