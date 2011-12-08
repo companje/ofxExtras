@@ -373,6 +373,24 @@ string ofxToString(ofVec4f v) {
     return ofToString(v.x) + "," + ofToString(v.y) + "," + ofToString(v.z) + "," + ofToString(v.w);
 }
 
+string ofxToString(ofMatrix4x4 m) {
+    stringstream ss;
+    ss << m;
+    string s = ss.str();
+    ofStringReplace(s, "\n", ",");
+    ofStringReplace(s, " ", "");
+    return s;
+}
+
+ofMatrix4x4 ofxToMatrix4x4(string s) {
+    vector<string> a = ofSplitString(s, ",");
+    float mat[16];
+    for (int i=0; i<16; i++) {
+        mat[i] = ofToFloat(a[i]);
+    }
+    return ofMatrix4x4(mat);
+}
+
 void ofxQuadricSphere(float radius, int resolution) {
     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
     gluQuadricTexture(quadric, GL_TRUE);
@@ -429,3 +447,12 @@ void ofxSetWindowRect(ofRectangle window) {
     ofSetWindowPosition(window.x,window.y);
     ofSetWindowShape(window.width, window.height);
 }
+
+bool ofxMouseMoved() {
+    static ofPoint pmouse;
+    ofPoint mouse(ofGetMouseX(),ofGetMouseY());
+    bool mouseIsMoving = (mouse!=pmouse);
+    pmouse = mouse;
+    return mouseIsMoving;
+}
+

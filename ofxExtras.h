@@ -11,6 +11,7 @@
 int ofxToInteger(string str);
 bool ofxToBoolean(string sValue);
 bool ofxToBoolean(float f);
+ofMatrix4x4 ofxToMatrix4x4(string str);
 string ofxToString(int value);
 string ofxToString(bool value);
 string ofxToString(ofRectangle value);
@@ -60,6 +61,7 @@ void ofxSetColorHSB(int h, int s, int b, int a=255);
 float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 
+string ofxToString(ofMatrix4x4 m);
 string ofxToString(ofVec2f value);
 string ofxToString(ofVec3f v, int precision=7);
 string ofxToString(ofVec4f value);
@@ -85,5 +87,8 @@ void ofxSetWindowRect(ofRectangle w);
 ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
 ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
 
+bool ofxMouseMoved();
+
+//void ofxCrossfade(ofImage &a, ofImage &b, float t);
 
 #endif
