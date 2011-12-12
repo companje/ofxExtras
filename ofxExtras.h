@@ -88,7 +88,8 @@ ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
 ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
 
 bool ofxMouseMoved();
+void ofxSetCursor(bool bVisible);
 
-//void ofxCrossfade(ofImage &a, ofImage &b, float t);
+float ofxGetHeading2D(ofVec2f v);
 
 #endif

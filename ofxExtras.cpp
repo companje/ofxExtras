@@ -456,3 +456,12 @@ bool ofxMouseMoved() {
     return mouseIsMoving;
 }
 
+void ofxSetCursor(bool bVisible) {
+    bVisible ? ofShowCursor() : ofHideCursor();
+}
+
+float ofxGetHeading2D(ofVec2f v) { //degrees
+    float angle = (float)atan2(-v.y, v.x);
+    return ofRadToDeg(-angle)+90;
+}
+
