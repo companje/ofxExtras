@@ -91,5 +91,8 @@ bool ofxMouseMoved();
 void ofxSetCursor(bool bVisible);
 
 float ofxGetHeading2D(ofVec2f v);
+int ofxIndex(float x, float y, float w);
+ofPoint ofxLerp(ofPoint start, ofPoint end, float amt);
+void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows=10, int cols=10);
 
 #endif
