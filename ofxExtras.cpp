@@ -154,7 +154,7 @@ string ofxGetHostName() {
     return hostname;
 }
 
-void ofxSetColor(int hexColor, int a) { //alpha between 0..255
+void ofxSetHexColor(int hexColor, int a) { //alpha between 0..255
 	int r = (hexColor >> 16) & 0xff;
 	int g = (hexColor >> 8) & 0xff;
 	int b = (hexColor >> 0) & 0xff;
