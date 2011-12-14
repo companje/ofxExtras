@@ -133,8 +133,9 @@ string ofxStringAfterFirst(string str, string key) {
 	return (string::npos != startpos) ? str.substr(startpos+key.size()) : str;
 }
 
-float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2) {
-    return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
+float ofxDist(float ax, float ay, float az, float bx, float by, float bz) {
+    return ofVec3f(ax,ay,az).distance(ofVec3f(bx,by,bz));
+    //return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
 }
 
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance) {
