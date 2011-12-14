@@ -50,6 +50,7 @@ string ofxStringBeforeFirst(string str, string key);
 string ofxStringAfterFirst(string str, string key);
 string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
+string ofxReplaceString(string input, string replace, string by);
 string ofxFromList(vector<string> &list, float normIndex);
 bool ofxStringEndsWith(string str, string key);
 bool ofxStringStartsWith(string str, string key);
@@ -87,8 +88,8 @@ void ofxSetWindowRect(ofRectangle w);
 ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
 ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
 
-bool ofxMouseMoved();
+bool ofxMouseMoved(); //this one should be fixed to update prev only once per update/draw not per call
 
-//void ofxCrossfade(ofImage &a, ofImage &b, float t);
+ofPoint ofxLerp(ofPoint start, ofPoint end, float amt);
 
 #endif

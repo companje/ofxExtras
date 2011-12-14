@@ -64,6 +64,11 @@ string ofxFormatString(string format, string s) {
 	return (string)buffer;
 }
 
+string ofxReplaceString(string input, string replace, string by) {
+    ofStringReplace(input, replace, by);
+    return input;
+}
+
 //void ofxAppendToFile(string filename, string str) {
 //    filename = ofToDataPath(filename);
 //    if (filename=="") die("ofAppendToFile:no filename");
@@ -454,5 +459,9 @@ bool ofxMouseMoved() {
     bool mouseIsMoving = (mouse!=pmouse);
     pmouse = mouse;
     return mouseIsMoving;
+}
+
+ofPoint ofxLerp(ofPoint start, ofPoint end, float amt) {
+    return start + amt * (end - start);
 }
 
