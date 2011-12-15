@@ -138,8 +138,9 @@ string ofxStringAfterFirst(string str, string key) {
 	return (string::npos != startpos) ? str.substr(startpos+key.size()) : str;
 }
 
-float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2) {
-    return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
+float ofxDist(float ax, float ay, float az, float bx, float by, float bz) {
+    return ofVec3f(ax,ay,az).distance(ofVec3f(bx,by,bz));
+    //return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
 }
 
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance) {
@@ -159,7 +160,7 @@ string ofxGetHostName() {
     return hostname;
 }
 
-void ofxSetColor(int hexColor, int a) { //alpha between 0..255
+void ofxSetHexColor(int hexColor, int a) { //alpha between 0..255
 	int r = (hexColor >> 16) & 0xff;
 	int g = (hexColor >> 8) & 0xff;
 	int b = (hexColor >> 0) & 0xff;
@@ -461,7 +462,60 @@ bool ofxMouseMoved() {
     return mouseIsMoving;
 }
 
+<<<<<<< HEAD
+=======
+void ofxSetCursor(bool bVisible) {
+    bVisible ? ofShowCursor() : ofHideCursor();
+}
+
+float ofxGetHeading2D(ofVec2f v) { //degrees
+    float angle = (float)atan2(-v.y, v.x);
+    return ofRadToDeg(-angle)+90;
+}
+
+int ofxIndex(float x, float y, float w) {
+    return y*w+x;
+}
+
+>>>>>>> 1f96c8fd5a9d3fde7c1773fa5a68eec6a219c2e3
 ofPoint ofxLerp(ofPoint start, ofPoint end, float amt) {
     return start + amt * (end - start);
 }
 
+<<<<<<< HEAD
+=======
+void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
+    float tw = tex.getTextureReference().getWidth();
+    float th = tex.getTextureReference().getHeight();
+    
+    ofMesh mesh;
+    
+    for (int x=0; x<=cols; x++) {
+        float f = float(x)/cols;
+        ofPoint vTop(ofxLerp(lt,rt,f));
+        ofPoint vBottom(ofxLerp(lb,rb,f));
+        ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
+        ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
+        
+        for (int y=0; y<=rows; y++) {
+            float f = float(y)/rows;            
+            ofPoint v = ofxLerp(vTop,vBottom,f);
+            mesh.addVertex(v);
+            mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
+        }
+    }
+    
+    for (float y=0; y<rows; y++) {
+        for (float x=0; x<cols; x++) {
+            mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
+            mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
+        }
+    }
+    
+    tex.getTextureReference().bind();
+    mesh.draw();
+    tex.getTextureReference().unbind();
+    mesh.drawVertices();
+}
+
+>>>>>>> 1f96c8fd5a9d3fde7c1773fa5a68eec6a219c2e3

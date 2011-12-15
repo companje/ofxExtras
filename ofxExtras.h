@@ -56,7 +56,7 @@ bool ofxStringEndsWith(string str, string key);
 bool ofxStringStartsWith(string str, string key);
 void ofxScale(float scale);
 void ofxNotice(string msg);
-void ofxSetColor(int hexColor, int a=255);
+void ofxSetHexColor(int hexColor, int a=255);
 void ofxSetColor(ofColor c);
 void ofxSetColorHSB(int h, int s, int b, int a=255);
 float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
@@ -89,7 +89,11 @@ ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
 ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
 
 bool ofxMouseMoved(); //this one should be fixed to update prev only once per update/draw not per call
-
 ofPoint ofxLerp(ofPoint start, ofPoint end, float amt);
+void ofxSetCursor(bool bVisible);
+
+float ofxGetHeading2D(ofVec2f v);
+int ofxIndex(float x, float y, float w);
+void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows=10, int cols=10);
 
 #endif
