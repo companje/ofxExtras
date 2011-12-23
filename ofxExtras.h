@@ -83,6 +83,8 @@ void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
 string ofxGetSerialString(ofSerial &serial, char until='\0');
+bool ofxGetSerialString(ofSerial &serial, string &output_str, char until='\0');
+
 void ofxSetWindowRect(ofRectangle w);
 
 ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
@@ -95,5 +97,6 @@ void ofxSetCursor(bool bVisible);
 float ofxGetHeading2D(ofVec2f v);
 int ofxIndex(float x, float y, float w);
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows=10, int cols=10);
-
+void ofxResetTransform(ofNode &n);
+                       
 #endif

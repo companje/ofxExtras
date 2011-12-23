@@ -437,6 +437,22 @@ string ofxGetSerialString(ofSerial &serial, char until) {
     }
 }
 
+bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
+    static string tmpstr; //cannot use output_str unless it's a member var of testApp. we want also support for local vars in functions. OR, we can try if this is really the case and needed
+    stringstream ss;
+    char ch;
+    int ttl=1000;
+    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+       ss << ch;   
+    }
+    tmpstr+=ss.str();
+    if (ch==until) {
+        output_str = tmpstr;
+        tmpstr = "";
+    }
+    return tmpstr!="";
+}
+
 ofVec3f ofxMouseToSphere(float x, float y) {  //-0.5 ... +0.5
     ofVec3f v(x,y);
     float mag = v.x*v.x + v.y*v.y;
@@ -462,8 +478,6 @@ bool ofxMouseMoved() {
     return mouseIsMoving;
 }
 
-<<<<<<< HEAD
-=======
 void ofxSetCursor(bool bVisible) {
     bVisible ? ofShowCursor() : ofHideCursor();
 }
@@ -476,14 +490,10 @@ float ofxGetHeading2D(ofVec2f v) { //degrees
 int ofxIndex(float x, float y, float w) {
     return y*w+x;
 }
-
->>>>>>> 1f96c8fd5a9d3fde7c1773fa5a68eec6a219c2e3
 ofPoint ofxLerp(ofPoint start, ofPoint end, float amt) {
     return start + amt * (end - start);
 }
 
-<<<<<<< HEAD
-=======
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
     float tw = tex.getTextureReference().getWidth();
     float th = tex.getTextureReference().getHeight();
@@ -518,4 +528,7 @@ void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPo
     mesh.drawVertices();
 }
 
->>>>>>> 1f96c8fd5a9d3fde7c1773fa5a68eec6a219c2e3
+void ofxResetTransform(ofNode &node) {
+    node.resetTransform();
+    node.setScale(1,1,1);
+}
