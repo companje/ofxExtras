@@ -1,13 +1,11 @@
-#ifndef OFX_EXTRAS
-#define OFX_EXTRAS
+#pragma once
 
 #include "ofMain.h"
-#include <fstream> //for ofxFileExists
 
-#define OFX_ALIGN_LEFT 0
-#define OFX_ALIGN_CENTER 1
-#define OFX_ALIGN_RIGHT 2
+#define ofxPrintln(str) cout << str << endl;
+//#define ofxStreamToString
 
+enum ofxAlign { LEFT, CENTER, RIGHT };
 int ofxToInteger(string str);
 bool ofxToBoolean(string sValue);
 bool ofxToBoolean(float f);
@@ -51,7 +49,14 @@ string ofxStringAfterFirst(string str, string key);
 string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
 string ofxReplaceString(string input, string replace, string by);
-string ofxFromList(vector<string> &list, float normIndex);
+
+///template<typename T> T ofxFromList(vector<T> &list, float normIndex);
+template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
+    int index = ofClamp(normIndex * list.size(), 0,list.size()-1);
+    if (list.size()==0) return T();
+    return list[index];
+}
+
 bool ofxStringEndsWith(string str, string key);
 bool ofxStringStartsWith(string str, string key);
 void ofxScale(float scale);
@@ -98,5 +103,6 @@ float ofxGetHeading2D(ofVec2f v);
 int ofxIndex(float x, float y, float w);
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows=10, int cols=10);
 void ofxResetTransform(ofNode &n);
+
+void ofxAssert(bool condition, string message);
                        
-#endif

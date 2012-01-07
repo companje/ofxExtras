@@ -1,11 +1,5 @@
 #include "ofxExtras.h"
 
-string ofxFromList(vector<string> &list, float normIndex) {
-    int index = normIndex * list.size();
-    if (index>=list.size()) return "";
-    return list[index];
-}
-
 void ofxNotice(string msg) {
     ofLog(OF_LOG_NOTICE, msg);
 }
@@ -17,10 +11,12 @@ string ofxGetFileExtension(string filename) {
 }
 
 bool ofxFileExists(string filename) {
-	ifstream inp;
-	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
-	inp.close();
-	return !inp.fail();
+    ofFile f(filename);
+    return f.exists();
+//	ifstream inp;
+//	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
+//	inp.close();
+//	return !inp.fail();
 }
 
 string ofxAddTrailingSlash(string foldername) {
@@ -425,13 +421,14 @@ string ofxGetSerialString(ofSerial &serial, char until) {
     char ch;
     int ttl=1000;
     while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-      ss << ch;
+        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+        ss << ch;
     }
     str+=ss.str();
     if (ch==until) {
         string tmp=str;
         str="";
-        return tmp;
+        return ofxTrimString(tmp);
     } else {
         return "";
     }
@@ -531,4 +528,11 @@ void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPo
 void ofxResetTransform(ofNode &node) {
     node.resetTransform();
     node.setScale(1,1,1);
+}
+
+void ofxAssert(bool condition, string message) {
+    if (!condition) {
+        ofLog(OF_LOG_ERROR,"%s", message.c_str());
+        std::exit(1);
+    }
 }
