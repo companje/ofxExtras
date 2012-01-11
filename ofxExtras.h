@@ -79,6 +79,7 @@ ofRectangle ofxToRectangle(ofVec4f v);
 void ofxRotate(float angle, ofVec3f v);
 void ofxRotate(ofVec3f v);
 void ofxRotate(ofQuaternion q);
+void ofxRotate(ofNode &node, ofQuaternion q);
 void ofxTranslate(ofVec3f v);
 void ofxScale(ofVec3f v);
 

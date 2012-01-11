@@ -317,6 +317,10 @@ void ofxRotate(ofQuaternion q) {
 	ofRotate(angle/TWO_PI*360,axis.x,axis.y,axis.z);
 }
 
+void ofxRotate(ofNode &node, ofQuaternion q) {
+    node.setOrientation(node.getOrientationQuat() * q);
+}
+
 void ofxRotate(float angle, ofVec3f v) {
     glRotatef(angle,v.x,v.y,v.z);
 }
