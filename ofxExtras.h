@@ -36,6 +36,7 @@ string ofxGetFileExtension(string filename);
 string ofxAddTrailingSlash(string foldername);
 string ofxAddTrailingString(string str, string trail);
 vector<string> ofxLoadStrings(string filename);
+void ofxSaveString(string filename, string str);
 void ofxSaveStrings(string filename, vector<string> lines);
 vector<string> ofxReadFiles(string folder);
 string ofxGetHostName();
@@ -49,6 +50,7 @@ string ofxStringAfterFirst(string str, string key);
 string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
 string ofxReplaceString(string input, string replace, string by);
+string ofxFormatDateTime(time_t rawtime, string format);
 
 ///template<typename T> T ofxFromList(vector<T> &list, float normIndex);
 template<typename T> T ofxFromList(vector<T> &list, float normIndex) {

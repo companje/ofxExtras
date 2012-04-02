@@ -86,10 +86,23 @@ vector<string> ofxLoadStrings(string filename) {
     return lines;
 }
 
+void ofxSaveString(string filename, string str) {
+    ofstream file(ofToDataPath(filename).c_str(),ios::out);
+    file << str;
+    file.close();
+}
+
 void ofxSaveStrings(string filename, vector<string> lines) {
-    ofstream fileOutput(ofToDataPath(filename).c_str(),ios::out);
-    for (int i=0; i<lines.size(); i++) fileOutput << lines[i] << endl;
-    fileOutput.close();
+    ofstream file(ofToDataPath(filename).c_str(),ios::out);
+    for (int i=0; i<lines.size(); i++) file << lines[i] << endl;
+    file.close();
+}
+
+string ofxFormatDateTime(time_t rawtime, string format) {
+	char buffer[80];
+	struct tm *timeinfo = localtime(&rawtime);
+	strftime(buffer,80,format.c_str(),timeinfo);
+	return (string)buffer;
 }
 
 void ofxSetTexture(ofBaseHasTexture &material) {
