@@ -75,15 +75,54 @@ string ofxReplaceString(string input, string replace, string by) {
 //    fclose(pFile);
 //}
 
-vector<string> ofxLoadStrings(string filename) {
-    vector<string> lines;
-    filename = ofToDataPath(filename);
-    if (!ofxFileExists(filename)) ofxExit("ofxLoadStrings: File not found: " + filename);
-    ifstream f(filename.c_str(),ios::in);
-    string line;
-    while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
-    f.close();
-    return lines;
+string ofxUrlToSafeLocalPath(string url) {
+    string filename = url;
+    filename = ofToLower(filename);
+    filename = ofxTrimString(filename);
+    filename = ofxReplaceString(filename, "http://", "");
+    filename = ofxReplaceString(filename, "/", "-");
+    filename = "images/"+filename;
+    return filename;
+}
+
+vector<string> ofxLoadStrings(string url) {
+    using Poco::URI;
+    URI uri(url);
+    
+    if (uri.isRelative()) {
+        string filename = uri.getPathAndQuery();
+        vector<string> lines;
+        filename = ofToDataPath(filename);
+        if (!ofxFileExists(filename)) ofxExit("ofxLoadStrings: File not found: " + filename);
+        ifstream f(filename.c_str(),ios::in);
+        string line;
+        while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
+        f.close();
+        return lines;        
+    } else {
+        try {
+            string str;
+            Poco::Net::HTTPClientSession session(uri.getHost());
+            Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri.getPathAndQuery(), Poco::Net::HTTPMessage::HTTP_1_1);
+            vector<string> usernamePassword = ofSplitString(uri.getUserInfo(),":");
+            if (usernamePassword.size()==2) {
+                Poco::Net::HTTPBasicCredentials auth(usernamePassword[0],usernamePassword[1]);
+                auth.authenticate(request);
+            }
+            session.sendRequest(request);
+            Poco::Net::HTTPResponse response;
+            istream& rs = session.receiveResponse(response);
+            
+            if (response.getStatus() == 200) {
+                Poco::StreamCopier::copyToString(rs, str);
+                return ofSplitString(str,"\n",true,true);
+            } else {
+                ofxExit("ofxLoadStrings: HTTP Error " + ofxToString(response.getStatus()));
+            }
+        }  catch (Poco::Exception &e) {
+            ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText());
+        }
+    }
 }
 
 void ofxSaveString(string filename, string str) {

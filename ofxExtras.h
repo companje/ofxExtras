@@ -2,6 +2,17 @@
 
 #include "ofMain.h"
 
+#include "Poco/Net/HTTPClientSession.h"
+#include "Poco/Net/HTTPRequest.h"
+#include "Poco/Net/HTTPResponse.h"
+#include "Poco/StreamCopier.h"
+#include "Poco/Path.h"
+#include "Poco/URI.h"
+#include "Poco/Exception.h"
+#include "Poco/URIStreamOpener.h"
+#include "Poco/Net/HTTPStreamFactory.h"
+#include "Poco/Net/HTTPBasicCredentials.h"
+
 #define ofxPrintln(str) cout << str << endl;
 //#define ofxStreamToString
 
@@ -35,7 +46,8 @@ bool ofxFileExists(string filename);
 string ofxGetFileExtension(string filename);
 string ofxAddTrailingSlash(string foldername);
 string ofxAddTrailingString(string str, string trail);
-vector<string> ofxLoadStrings(string filename);
+vector<string> ofxLoadStrings(string url);
+//vector<string> ofxLoadStrings(string url, string username, string password);
 void ofxSaveString(string filename, string str);
 void ofxSaveStrings(string filename, vector<string> lines);
 vector<string> ofxReadFiles(string folder);
@@ -108,4 +120,6 @@ void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPo
 void ofxResetTransform(ofNode &n);
 
 void ofxAssert(bool condition, string message);
+string ofxUrlToSafeLocalPath(string url);
+
                        
