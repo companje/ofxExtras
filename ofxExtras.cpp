@@ -81,8 +81,14 @@ string ofxUrlToSafeLocalPath(string url) {
     filename = ofxTrimString(filename);
     filename = ofxReplaceString(filename, "http://", "");
     filename = ofxReplaceString(filename, "/", "-");
-    filename = "images/"+filename;
+    //filename = "images/"+filename;
     return filename;
+}
+
+string ofxGetFilenameFromUrl(string url) {
+    vector<string> items = ofSplitString(url,"/");
+    if (items.size()==0) return url;
+    else return items.back();
 }
 
 vector<string> ofxLoadStrings(string url) {
@@ -142,6 +148,12 @@ string ofxFormatDateTime(time_t rawtime, string format) {
 	struct tm *timeinfo = localtime(&rawtime);
 	strftime(buffer,80,format.c_str(),timeinfo);
 	return (string)buffer;
+}
+
+int ofxGetTimeStamp() {
+    time_t rawtime;
+    time(&rawtime);
+    return rawtime;
 }
 
 void ofxSetTexture(ofBaseHasTexture &material) {

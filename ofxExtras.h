@@ -121,5 +121,7 @@ void ofxResetTransform(ofNode &n);
 
 void ofxAssert(bool condition, string message);
 string ofxUrlToSafeLocalPath(string url);
+string ofxGetFilenameFromUrl(string url);
 
+int ofxGetTimeStamp();
                        
