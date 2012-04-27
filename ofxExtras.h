@@ -104,6 +104,8 @@ void ofxDisableDepthTest();
 
 string ofxGetSerialString(ofSerial &serial, char until='\0');
 bool ofxGetSerialString(ofSerial &serial, string &output_str, char until='\0');
+void ofxSerialWrite(ofSerial &serial, string str);
+void ofxSerialWriteLine(ofSerial &serial, string str);
 
 void ofxSetWindowRect(ofRectangle w);
 
@@ -121,5 +123,6 @@ void ofxResetTransform(ofNode &n);
 
 void ofxAssert(bool condition, string message);
 string ofxUrlToSafeLocalPath(string url);
+string ofxGetFilenameFromUrl(string url);
 
-                       
+int ofxGetTimeStamp();
