@@ -527,7 +527,7 @@ bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
     char ch;
     int ttl=1000;
     while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-       ss << ch;   
+       ss << ch;
     }
     tmpstr+=ss.str();
     if (ch==until) {
@@ -535,6 +535,15 @@ bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
         tmpstr = "";
     }
     return tmpstr!="";
+}
+
+void ofxSerialWrite(ofSerial &serial, string str) {
+    serial.writeBytes((unsigned char*)str.c_str(), str.size());
+}
+
+void ofxSerialWriteLine(ofSerial &serial, string str) {
+    str+="\n";
+    serial.writeBytes((unsigned char*)str.c_str(), str.size());
 }
 
 ofVec3f ofxMouseToSphere(float x, float y) {  //-0.5 ... +0.5
@@ -581,31 +590,31 @@ ofPoint ofxLerp(ofPoint start, ofPoint end, float amt) {
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
     float tw = tex.getTextureReference().getWidth();
     float th = tex.getTextureReference().getHeight();
-    
+
     ofMesh mesh;
-    
+
     for (int x=0; x<=cols; x++) {
         float f = float(x)/cols;
         ofPoint vTop(ofxLerp(lt,rt,f));
         ofPoint vBottom(ofxLerp(lb,rb,f));
         ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
         ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
-        
+
         for (int y=0; y<=rows; y++) {
-            float f = float(y)/rows;            
+            float f = float(y)/rows;
             ofPoint v = ofxLerp(vTop,vBottom,f);
             mesh.addVertex(v);
             mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
         }
     }
-    
+
     for (float y=0; y<rows; y++) {
         for (float x=0; x<cols; x++) {
             mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
             mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
         }
     }
-    
+
     tex.getTextureReference().bind();
     mesh.draw();
     tex.getTextureReference().unbind();
