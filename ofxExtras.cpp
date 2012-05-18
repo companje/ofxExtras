@@ -475,6 +475,25 @@ void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution) {
     gluDisk(quadric, innerRadius, outerRadius, resolution, resolution);
 }
 
+void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
+    float cx = img.getTextureReference().getWidth()/2; //center of image
+    float cy = img.getTextureReference().getHeight()/2; //center of image
+    float step = TWO_PI/slices; //size of a slice in radians
+    
+    img.getTextureReference().bind();
+    
+    glBegin(GL_TRIANGLE_FAN);
+    for (float f=0; f<TWO_PI; f+=step) {
+        glTexCoord2f(cx,cy);
+        glVertex2f(0,0);
+        glTexCoord2f(cx+cx*sin(f), cy+cy*cos(f));
+        glVertex2f(r*sin(f), r*cos(f));
+        glTexCoord2f(cx+cx*sin(f+step), cy+cy*cos(f+step));
+        glVertex2f(r*sin(f+step), r*cos(f+step));
+    }
+    glEnd();
+}
+
 void ofxEnableDepthTest() {
     glEnable(GL_DEPTH_TEST);
 }
