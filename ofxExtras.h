@@ -100,6 +100,8 @@ void ofxScale(ofVec3f v);
 void ofxQuadricSphere(float radius, int resolution=32);
 void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution=32);
 void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices=24);
+void ofxDrawSphere(float radius, int segments);
+                   
 void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
