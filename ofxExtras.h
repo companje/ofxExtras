@@ -14,6 +14,9 @@
 #include "Poco/Net/HTTPBasicCredentials.h"
 
 #define ofxPrintln(str) cout << str << endl;
+#define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
+#define endfor }
+
 //#define ofxStreamToString
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
@@ -127,3 +130,5 @@ string ofxUrlToSafeLocalPath(string url);
 string ofxGetFilenameFromUrl(string url);
 
 int ofxGetTimeStamp();
+
+
