@@ -16,6 +16,8 @@
 #define ofxPrintln(str) cout << str << endl;
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
+#define ofxBeginApp() class testApp : public ofBaseApp { public:
+#define ofxEndApp() };
 
 //#define ofxStreamToString
 
