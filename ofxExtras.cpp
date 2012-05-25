@@ -99,7 +99,7 @@ vector<string> ofxLoadStrings(string url) {
         string filename = uri.getPathAndQuery();
         vector<string> lines;
         filename = ofToDataPath(filename);
-        if (!ofxFileExists(filename)) ofxExit("ofxLoadStrings: File not found: " + filename);
+        if (!ofxFileExists(filename)) { ofLogError() << "ofxLoadStrings: File not found: " << filename; return lines; }
         ifstream f(filename.c_str(),ios::in);
         string line;
         while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
@@ -123,7 +123,9 @@ vector<string> ofxLoadStrings(string url) {
                 Poco::StreamCopier::copyToString(rs, str);
                 return ofSplitString(str,"\n",true,true);
             } else {
-                ofxExit("ofxLoadStrings: HTTP Error " + ofxToString(response.getStatus()));
+                ofLogError() << ("ofxLoadStrings: HTTP Error " + ofxToString(response.getStatus()));
+                vector<string> lines;
+                return lines;
             }
         }  catch (Poco::Exception &e) {
             ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText());
@@ -150,7 +152,14 @@ string ofxFormatDateTime(time_t rawtime, string format) {
 	return (string)buffer;
 }
 
-int ofxGetTimeStamp() {
+time_t ofxParseDateTime(string datetime, string format) {
+    //http://www.cplusplus.com/reference/clibrary/ctime/strftime/
+    struct tm tm[1] = {{0}};
+    strptime(datetime.c_str(), format.c_str(), tm);
+    return mktime(tm);
+}
+
+time_t ofxGetDateTime() {
     time_t rawtime;
     time(&rawtime);
     return rawtime;
@@ -583,7 +592,12 @@ float ofxGetHeading2D(ofVec2f v) { //degrees
 int ofxIndex(float x, float y, float w) {
     return y*w+x;
 }
+
 ofPoint ofxLerp(ofPoint start, ofPoint end, float amt) {
+    return start + amt * (end - start);
+}
+
+float ofxLerp(float start, float end, float amt) {
     return start + amt * (end - start);
 }
 
@@ -632,6 +646,25 @@ void ofxAssert(bool condition, string message) {
         std::exit(1);
     }
 }
+
+void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
+    float delta = fabs(stopAngle-startAngle);
+    if (delta<FLT_EPSILON) return; //don't draw if arc to small
+    glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
+    int n = 200 * delta/TWO_PI; //a full circle=200 segments
+    if (n==0) return;
+    for (int i=0; i<=n; i++) { 
+        float f = -ofMap(i,0,n,startAngle,stopAngle);
+        float x1 = innerRadius * cos(f);
+        float y1 = innerRadius * sin(f);
+        float x2 = outerRadius * cos(f);
+        float y2 = outerRadius * sin(f);
+        glVertex2f(x1,y1);
+        glVertex2f(x2,y2);
+    }
+    glEnd();
+}
+
 
 // from Cinder
 // http://local.wasp.uwa.edu.au/~pbourke/texture_colour/spheremap/  Paul Bourke's sphere code

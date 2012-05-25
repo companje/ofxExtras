@@ -17,9 +17,9 @@
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
 #define ofxBeginApp() class testApp : public ofBaseApp { public:
-#define ofxEndApp() };
+#define ofxEndApp() }; 
 
-//#define ofxStreamToString
+#define TAU TWO_PI
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
 int ofxToInteger(string str);
@@ -68,6 +68,8 @@ string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
 string ofxReplaceString(string input, string replace, string by);
 string ofxFormatDateTime(time_t rawtime, string format);
+time_t ofxParseDateTime(string datetime, string format);
+time_t ofxGetDateTime();
 
 ///template<typename T> T ofxFromList(vector<T> &list, float normIndex);
 template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
@@ -106,7 +108,8 @@ void ofxQuadricSphere(float radius, int resolution=32);
 void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution=32);
 void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices=24);
 void ofxDrawSphere(float radius, int segments);
-                   
+void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle); //radians
+
 void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
@@ -122,6 +125,8 @@ ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
 
 bool ofxMouseMoved(); //this one should be fixed to update prev only once per update/draw not per call
 ofPoint ofxLerp(ofPoint start, ofPoint end, float amt);
+float ofxLerp(float start, float end, float amt);
+
 void ofxSetCursor(bool bVisible);
 
 float ofxGetHeading2D(ofVec2f v);
@@ -132,7 +137,4 @@ void ofxResetTransform(ofNode &n);
 void ofxAssert(bool condition, string message);
 string ofxUrlToSafeLocalPath(string url);
 string ofxGetFilenameFromUrl(string url);
-
-int ofxGetTimeStamp();
-
 
