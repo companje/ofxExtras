@@ -159,6 +159,16 @@ time_t ofxParseDateTime(string datetime, string format) {
     return mktime(tm);
 }
 
+//vector<string> ofxParseString(string str, string format) {
+//    // Example:
+//    string input = "foo bar 10 20 hello 30";
+//    int a,b,c;
+//    string garbage;
+//    stringstream foo;
+//    foo << input;
+//    input >> garbage >> garbage >> a >> b >> garbage >> c;
+//}
+
 time_t ofxGetDateTime() {
     time_t rawtime;
     time(&rawtime);
@@ -584,9 +594,24 @@ void ofxSetCursor(bool bVisible) {
     bVisible ? ofShowCursor() : ofHideCursor();
 }
 
-float ofxGetHeading2D(ofVec2f v) { //degrees
-    float angle = (float)atan2(-v.y, v.x);
-    return ofRadToDeg(-angle)+90;
+float ofxGetHeading(ofPoint p, ofPoint anchor) { //radians
+    p-=anchor;
+    return (float)atan2(p.y, -p.x)+PI;
+}
+
+ofPoint ofxGetPointOnCircle(float angle, float radius) { //radians
+    ofPoint p;
+    p.x = radius*cos(angle);
+    p.y = radius*sin(-angle);
+    return p;
+}
+
+ofPoint ofxGetMouse() {
+    return ofPoint(ofGetMouseX(),ofGetMouseY());
+}
+
+ofPoint ofxGetMouseFromCenter() {
+    return ofxGetMouse()-ofxGetCenter();
 }
 
 int ofxIndex(float x, float y, float w) {
@@ -650,9 +675,9 @@ void ofxAssert(bool condition, string message) {
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
     float delta = fabs(stopAngle-startAngle);
     if (delta<FLT_EPSILON) return; //don't draw if arc to small
-    glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
     int n = 200 * delta/TWO_PI; //a full circle=200 segments
     if (n==0) return;
+    glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
     for (int i=0; i<=n; i++) { 
         float f = -ofMap(i,0,n,startAngle,stopAngle);
         float x1 = innerRadius * cos(f);
@@ -665,6 +690,16 @@ void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float s
     glEnd();
 }
 
+void ofxArc(float radius, float startAngle, float stopAngle, int detail) { //radians
+    glBegin(GL_LINE_STRIP);
+    for (int i=0,n=detail; i<=n; i++) { 
+        float f = -ofMap(i,0,n,startAngle,stopAngle);
+        float x = radius * cos(f);
+        float y = radius * sin(f);
+        glVertex2f(x,y);
+    }
+    glEnd();
+}
 
 // from Cinder
 // http://local.wasp.uwa.edu.au/~pbourke/texture_colour/spheremap/  Paul Bourke's sphere code
@@ -719,4 +754,96 @@ void ofxDrawSphere(float radius, int segments )
 	delete [] verts;
 	delete [] normals;
 	delete [] texCoords;
+}
+
+ofPoint ofxGetCenter() {
+    return ofPoint(ofGetWidth()/2, ofGetHeight()/2);
+}
+
+ofPoint ofxGetCenterOfMass(vector<ofPoint*> points) {
+    //calculating the average of the vectors
+    ofPoint sum;
+    if (points.size()==0) return ofPoint(0,0);
+    for (int i=0; i<points.size(); i++) sum+=(*points[i]);
+    return sum/points.size();
+}
+
+ofRectangle ofxGetBoundingBox(vector<ofPoint*> points) {
+    if (points.size()<1) return ofRectangle();
+    float xMin=9999,xMax=-9999,yMin=9999,yMax=-9999;
+    for (int i=0; i<points.size(); i++) {
+        ofPoint &pt = *points[i];
+        xMin = min(xMin,pt.x);
+        xMax = max(xMax,pt.x);
+        yMin = min(yMin,pt.y);
+        yMax = max(yMax,pt.y);
+    }
+    return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
+}
+
+void ofxSimplifyPath(ofPath &path, int iterations, float amount) {
+    for (int iteration=0; iteration<iterations; iteration++) {
+        vector<ofSubPath> &subpaths = path.getSubPaths();
+        for (int i=0; i<subpaths.size(); i++) {
+            vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+            if (commands.size()<amount) continue;
+            for (int j=0; j<commands.size()-1; j++) {
+                if (commands[j].to.distance(commands[j+1].to)<3) {
+                    commands[j].to = (commands[j].to+commands[j+1].to)/2;
+                    commands.erase(commands.begin()+j+1);
+                }
+            }
+        }
+    }
+    path.flagShapeChanged();
+}
+
+vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
+    vector<ofPoint*> points;
+    vector<ofSubPath> &subpaths = path.getSubPaths();
+    for (int i=0; i<subpaths.size(); i++) {
+        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+        for (int j=0; j<commands.size(); j++) {
+            points.push_back(&commands[j].to);
+        }
+    }
+    return points;
+}
+
+
+//
+//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxLatLon ll) {	
+//	//from ofxLatLon to ofxQuaternionExtra
+//	return *this = ofxCartesian(ll);
+//}
+//
+//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxCartesian cp) {
+//	//from ofxCartesian to ofxQuaternionExtra
+//	*this = ofxMatrix4x4(0,0,0,0, 0,0,0,0, -cp.x,-cp.y,-cp.z,0, 0,0,0,1);
+//	return *this;
+//}
+
+ofQuaternion ofxToQuaternion(float lat, float lon) {
+    ofQuaternion q;
+    q *= ofQuaternion(lon, ofVec3f(0,1,0));
+    q *= ofQuaternion(lat, ofVec3f(1,0,0));
+    return q;
+}
+
+ofVec3f ofxToCartesian(float lat, float lon) {
+    float angle;
+    ofVec3f vec;
+    ofxToQuaternion(lat,lon).getRotate(angle, vec);
+    return ofVec3f(0,0,1).rotated(angle, vec);
+}
+
+ofVec3f ofxToCartesian(ofQuaternion q) {
+    float angle;
+    ofVec3f vec;
+    q.getRotate(angle, vec);
+    return ofVec3f(0,0,1).rotated(angle, vec);
+}
+
+void ofxDrawVertex(ofVec3f v) {
+    glVertex3f(v.x,v.y,v.z);
 }

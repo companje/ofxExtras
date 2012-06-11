@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-
+#include "ofAppGlutWindow.h"
 #include "Poco/Net/HTTPClientSession.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPResponse.h"
@@ -16,8 +16,9 @@
 #define ofxPrintln(str) cout << str << endl;
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
-#define ofxBeginApp() class testApp : public ofBaseApp { public:
-#define ofxEndApp() }; 
+#define ofxBeginApp(w,h) int _width=w; int _height=h; class ofApp : public ofBaseApp { public:
+//#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow(), _width, _height, OF_WINDOW); ofRunApp(new testApp()); }
+#define ofxEndApp() }; int main() { ofAppGlutWindow w; w.setGlutDisplayString("rgba double samples>=4"); ofSetupOpenGL(&w, _width, _height, OF_WINDOW); ofRunApp(new ofApp()); }
 
 #define TAU TWO_PI
 
@@ -37,6 +38,7 @@ string ofxToString(ofQuaternion q);
 string ofxToString(ofColor c);
 string ofxToHexString(int value, int digits);
 
+ofQuaternion ofxToQuaternion(float lat, float lon);
 ofQuaternion ofxToQuaternion(string str);
 ofRectangle ofxToRectangle(string str);
 vector<string> ofxToStringVector(string value);
@@ -70,6 +72,7 @@ string ofxReplaceString(string input, string replace, string by);
 string ofxFormatDateTime(time_t rawtime, string format);
 time_t ofxParseDateTime(string datetime, string format);
 time_t ofxGetDateTime();
+//vector<string> ofxParseString(string str, string format);
 
 ///template<typename T> T ofxFromList(vector<T> &list, float normIndex);
 template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
@@ -107,8 +110,9 @@ void ofxScale(ofVec3f v);
 void ofxQuadricSphere(float radius, int resolution=32);
 void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution=32);
 void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices=24);
-void ofxDrawSphere(float radius, int segments);
+void ofxDrawSphere(float radius, int segments=32);
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle); //radians
+void ofxArc(float radius, float startAngle, float stopAngle, int detail=32); //radians
 
 void ofxEnableDepthTest();
 void ofxDisableDepthTest();
@@ -128,8 +132,12 @@ ofPoint ofxLerp(ofPoint start, ofPoint end, float amt);
 float ofxLerp(float start, float end, float amt);
 
 void ofxSetCursor(bool bVisible);
+ofPoint ofxGetCenter();
+ofPoint ofxGetMouseFromCenter();
 
-float ofxGetHeading2D(ofVec2f v);
+float ofxGetHeading(ofPoint p, ofPoint anchor=ofPoint(0,0)); //radians
+ofPoint ofxGetPointOnCircle(float angle, float radius); //radians
+
 int ofxIndex(float x, float y, float w);
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows=10, int cols=10);
 void ofxResetTransform(ofNode &n);
@@ -138,3 +146,11 @@ void ofxAssert(bool condition, string message);
 string ofxUrlToSafeLocalPath(string url);
 string ofxGetFilenameFromUrl(string url);
 
+ofPoint ofxGetCenterOfMass(vector<ofPoint*> points);
+ofRectangle ofxGetBoundingBox(vector<ofPoint*> points);
+void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15);
+vector<ofPoint*> ofxGetPointsFromPath(ofPath &path);
+
+ofVec3f ofxToCartesian(float lat, float lon);
+ofVec3f ofxToCartesian(ofQuaternion q);
+void ofxDrawVertex(ofVec3f v);
