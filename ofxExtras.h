@@ -16,13 +16,8 @@
 #define ofxPrintln(str) cout << str << endl;
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
-//#define ofxBeginApp(w,h) int _width=w; int _height=h; class ofApp : public ofBaseApp { public:
-//#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow(), _width, _height, OF_WINDOW); ofRunApp(new testApp()); }
-//#define ofxEndApp() }; int main() { ofAppGlutWindow w; w.setGlutDisplayString("rgba double samples>=4"); ofSetupOpenGL(&w, _width, _height, OF_WINDOW); ofRunApp(new ofApp()); }
-
 #define ofxBeginApp() class ofApp : public ofBaseApp { public: 
 #define ofxEndApp() };
-
 #define TAU TWO_PI
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
