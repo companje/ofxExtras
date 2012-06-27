@@ -848,3 +848,23 @@ ofxLatLon ofxToLatLon(ofQuaternion q) {
     if (lon<-180) lon+=360;
     return (ofxLatLon){lat,lon};
 }
+
+string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font) {
+    vector<string> lines = ofSplitString(input,"\n");
+    for (int l=0; l<lines.size(); l++) {
+        vector<string> words = ofSplitString(lines[l]," ");
+        int strWidth=0;
+        for (int w=0; w<words.size(); w++) {
+            int nextWidth = font ? font->stringWidth(words[w]+"i") : words[w].length()+1;
+            
+            if (strWidth+nextWidth < maxWidth) {
+                strWidth+=nextWidth;
+            } else {
+                strWidth=nextWidth;
+                words[w] = "\n" + words[w];
+            }
+        }
+        lines[l] = ofJoinString(words, " ");
+    }
+    return ofJoinString(lines, "\n");
+}

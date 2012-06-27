@@ -162,3 +162,5 @@ void ofxDrawVertex(ofVec3f v);
 typedef struct { float lat; float lon; } ofxLatLon;
 
 ofxLatLon ofxToLatLon(ofQuaternion q);
+
+string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font=0);
