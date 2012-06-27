@@ -13,10 +13,10 @@ string ofxGetFileExtension(string filename) {
 bool ofxFileExists(string filename) {
     ofFile f(filename);
     return f.exists();
-//	ifstream inp;
-//	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
-//	inp.close();
-//	return !inp.fail();
+    //	ifstream inp;
+    //	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
+    //	inp.close();
+    //	return !inp.fail();
 }
 
 string ofxAddTrailingSlash(string foldername) {
@@ -188,7 +188,7 @@ void ofxDisableTexture() {
 #ifdef GL_TEXTURE_RECTANGLE_ARB
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
 #endif
-
+    
 }
 
 // trim trailing spaces
@@ -253,7 +253,7 @@ void ofxSetColor(ofColor c) {
 void ofxSetColorHSB(int h, int s, int b, int a) {
     unsigned char hsv[] = {h,s,b};
     unsigned char rgb[] = {0,0,0};
-
+    
     if (hsv[2] == 0); // black
 	else if (hsv[1] == 0) { rgb[0]=b;  rgb[1]=b; rgb[2]=b; } // grays
     else {
@@ -546,7 +546,7 @@ bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
     char ch;
     int ttl=1000;
     while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-       ss << ch;
+        ss << ch;
     }
     tmpstr+=ss.str();
     if (ch==until) {
@@ -629,16 +629,16 @@ float ofxLerp(float start, float end, float amt) {
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
     float tw = tex.getTextureReference().getWidth();
     float th = tex.getTextureReference().getHeight();
-
+    
     ofMesh mesh;
-
+    
     for (int x=0; x<=cols; x++) {
         float f = float(x)/cols;
         ofPoint vTop(ofxLerp(lt,rt,f));
         ofPoint vBottom(ofxLerp(lb,rb,f));
         ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
         ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
-
+        
         for (int y=0; y<=rows; y++) {
             float f = float(y)/rows;
             ofPoint v = ofxLerp(vTop,vBottom,f);
@@ -646,14 +646,14 @@ void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPo
             mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
         }
     }
-
+    
     for (float y=0; y<rows; y++) {
         for (float x=0; x<cols; x++) {
             mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
             mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
         }
     }
-
+    
     tex.getTextureReference().bind();
     mesh.draw();
     tex.getTextureReference().unbind();
