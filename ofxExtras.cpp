@@ -810,31 +810,18 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
     return points;
 }
 
-
-//
-//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxLatLon ll) {	
-//	//from ofxLatLon to ofxQuaternionExtra
-//	return *this = ofxCartesian(ll);
-//}
-//
-//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxCartesian cp) {
-//	//from ofxCartesian to ofxQuaternionExtra
-//	*this = ofxMatrix4x4(0,0,0,0, 0,0,0,0, -cp.x,-cp.y,-cp.z,0, 0,0,0,1);
-//	return *this;
-//}
-
 ofQuaternion ofxToQuaternion(float lat, float lon) {
     ofQuaternion q;
-    q *= ofQuaternion(lon, ofVec3f(0,1,0));
     q *= ofQuaternion(lat, ofVec3f(1,0,0));
+    q *= ofQuaternion(lon, ofVec3f(0,1,0));
     return q;
 }
 
 ofVec3f ofxToCartesian(float lat, float lon) {
-    float angle;
-    ofVec3f vec;
-    ofxToQuaternion(lat,lon).getRotate(angle, vec);
-    return ofVec3f(0,0,1).rotated(angle, vec);
+    ofVec3f v(0,0,1);
+    v.rotate(lat,ofVec3f(1,0,0));
+    v.rotate(lon,ofVec3f(0,1,0));
+    return v;
 }
 
 ofVec3f ofxToCartesian(ofQuaternion q) {
@@ -846,4 +833,18 @@ ofVec3f ofxToCartesian(ofQuaternion q) {
 
 void ofxDrawVertex(ofVec3f v) {
     glVertex3f(v.x,v.y,v.z);
+}
+
+ofxLatLon ofxToLatLon(ofQuaternion q) {
+    ofVec3f c;
+    ofVec4f v(0,0,-1,0);
+    ofMatrix4x4 m;
+    q.get(m);
+    ofVec4f mv = m*v;
+    c.set(mv.x,mv.y,-mv.z);
+    c.rotate(90, 0, 0);
+    float lat = ofRadToDeg(asin(c.z));
+    float lon = ofRadToDeg(-atan2(c.y,c.x))-90;
+    if (lon<-180) lon+=360;
+    return (ofxLatLon){lat,lon};
 }

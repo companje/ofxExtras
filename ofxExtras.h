@@ -18,7 +18,7 @@
 #define endfor }
 #define ofxBeginApp(w,h) int _width=w; int _height=h; class ofApp : public ofBaseApp { public:
 //#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow(), _width, _height, OF_WINDOW); ofRunApp(new testApp()); }
-#define ofxEndApp() }; int main() { ofAppGlutWindow w; w.setGlutDisplayString("rgba double samples>=4"); ofSetupOpenGL(&w, _width, _height, OF_WINDOW); ofRunApp(new ofApp()); }
+#define ofxEndApp() }; int main() { ofAppGlutWindow w; w.setGlutDisplayString("rgba double depth samples>=4"); ofSetupOpenGL(&w, _width, _height, OF_WINDOW); ofRunApp(new ofApp()); }
 
 #define TAU TWO_PI
 
@@ -154,3 +154,7 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path);
 ofVec3f ofxToCartesian(float lat, float lon);
 ofVec3f ofxToCartesian(ofQuaternion q);
 void ofxDrawVertex(ofVec3f v);
+
+typedef struct { float lat; float lon; } ofxLatLon;
+
+ofxLatLon ofxToLatLon(ofQuaternion q);
