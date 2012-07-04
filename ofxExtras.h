@@ -13,18 +13,14 @@
 #include "Poco/Net/HTTPStreamFactory.h"
 #include "Poco/Net/HTTPBasicCredentials.h"
 
+#define TAU TWO_PI
+
 #define ofxPrintln(str) cout << str << endl;
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
 
-//#define ofxBeginApp(w,h) int _width=w; int _height=h; class ofApp : public ofBaseApp { public:
-//#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow(), _width, _height, OF_WINDOW); ofRunApp(new testApp()); }
-//#define ofxEndApp() }; int main() { ofAppGlutWindow w; w.setGlutDisplayString("rgba double depth samples>=4"); ofSetupOpenGL(&w, _width, _height, OF_WINDOW); ofRunApp(new ofApp()); }
-
 #define ofxBeginApp() class ofApp : public ofBaseApp { public: 
-#define ofxEndApp() };
-
-#define TAU TWO_PI
+#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow,500,500,OF_WINDOW); ofRunApp(new ofApp); }
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
 int ofxToInteger(string str);
@@ -121,8 +117,8 @@ void ofxArc(float radius, float startAngle, float stopAngle, int detail=32); //r
 void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
-string ofxGetSerialString(ofSerial &serial, char until='\0');
-bool ofxGetSerialString(ofSerial &serial, string &output_str, char until='\0');
+string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
+bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
 void ofxSerialWrite(ofSerial &serial, string str);
 void ofxSerialWriteLine(ofSerial &serial, string str);
 
