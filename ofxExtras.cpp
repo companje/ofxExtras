@@ -870,3 +870,13 @@ string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font) {
     }
     return ofJoinString(lines, "\n");
 }
+
+int ofxGetMultiByteStringLength(string s) { //corrected for 3 bytes UTF-8 characters
+    //count the number of special chars (3 bytes) in the string
+    int total = 0;
+    for (int i=0; i<s.length(); i++) {
+        if (s.at(i)<0) total++;
+    }
+    total/=3; //3 bytes per special char
+    return s.length()-total*2; //subtract 2 of the length for each special char
+}

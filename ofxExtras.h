@@ -155,6 +155,8 @@ ofVec3f ofxToCartesian(float lat, float lon);
 ofVec3f ofxToCartesian(ofQuaternion q);
 void ofxDrawVertex(ofVec3f v);
 
+int ofxGetMultiByteStringLength(string s); //returns the actual string length instead of the number of chars/bytes
+
 typedef struct { float lat; float lon; } ofxLatLon;
 
 ofxLatLon ofxToLatLon(ofQuaternion q);
