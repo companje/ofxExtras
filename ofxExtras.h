@@ -13,12 +13,14 @@
 #include "Poco/Net/HTTPStreamFactory.h"
 #include "Poco/Net/HTTPBasicCredentials.h"
 
+#define TAU TWO_PI
+
 #define ofxPrintln(str) cout << str << endl;
 #define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
 #define endfor }
+
 #define ofxBeginApp() class ofApp : public ofBaseApp { public: 
-#define ofxEndApp() };
-#define TAU TWO_PI
+#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow,500,500,OF_WINDOW); ofRunApp(new ofApp); }
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
 int ofxToInteger(string str);
@@ -115,8 +117,8 @@ void ofxArc(float radius, float startAngle, float stopAngle, int detail=32); //r
 void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
-string ofxGetSerialString(ofSerial &serial, char until='\0');
-bool ofxGetSerialString(ofSerial &serial, string &output_str, char until='\0');
+string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
+bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
 void ofxSerialWrite(ofSerial &serial, string str);
 void ofxSerialWriteLine(ofSerial &serial, string str);
 
@@ -152,3 +154,11 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path);
 ofVec3f ofxToCartesian(float lat, float lon);
 ofVec3f ofxToCartesian(ofQuaternion q);
 void ofxDrawVertex(ofVec3f v);
+
+int ofxGetMultiByteStringLength(string s); //returns the actual string length instead of the number of chars/bytes
+
+typedef struct { float lat; float lon; } ofxLatLon;
+
+ofxLatLon ofxToLatLon(ofQuaternion q);
+
+string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font=0);

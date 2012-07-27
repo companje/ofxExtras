@@ -810,31 +810,18 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
     return points;
 }
 
-
-//
-//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxLatLon ll) {	
-//	//from ofxLatLon to ofxQuaternionExtra
-//	return *this = ofxCartesian(ll);
-//}
-//
-//ofxQuaternionExtra& ofxQuaternionExtra::operator=(ofxCartesian cp) {
-//	//from ofxCartesian to ofxQuaternionExtra
-//	*this = ofxMatrix4x4(0,0,0,0, 0,0,0,0, -cp.x,-cp.y,-cp.z,0, 0,0,0,1);
-//	return *this;
-//}
-
 ofQuaternion ofxToQuaternion(float lat, float lon) {
     ofQuaternion q;
-    q *= ofQuaternion(lon, ofVec3f(0,1,0));
     q *= ofQuaternion(lat, ofVec3f(1,0,0));
+    q *= ofQuaternion(lon, ofVec3f(0,1,0));
     return q;
 }
 
 ofVec3f ofxToCartesian(float lat, float lon) {
-    float angle;
-    ofVec3f vec;
-    ofxToQuaternion(lat,lon).getRotate(angle, vec);
-    return ofVec3f(0,0,1).rotated(angle, vec);
+    ofVec3f v(0,0,1);
+    v.rotate(lat,ofVec3f(1,0,0));
+    v.rotate(lon,ofVec3f(0,1,0));
+    return v;
 }
 
 ofVec3f ofxToCartesian(ofQuaternion q) {
@@ -846,4 +833,48 @@ ofVec3f ofxToCartesian(ofQuaternion q) {
 
 void ofxDrawVertex(ofVec3f v) {
     glVertex3f(v.x,v.y,v.z);
+}
+
+ofxLatLon ofxToLatLon(ofQuaternion q) {
+    ofVec3f c;
+    ofVec4f v(0,0,-1,0);
+    ofMatrix4x4 m;
+    q.get(m);
+    ofVec4f mv = m*v;
+    c.set(mv.x,mv.y,-mv.z);
+    c.rotate(90, 0, 0);
+    float lat = ofRadToDeg(asin(c.z));
+    float lon = ofRadToDeg(-atan2(c.y,c.x))-90;
+    if (lon<-180) lon+=360;
+    return (ofxLatLon){lat,lon};
+}
+
+string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font) {
+    vector<string> lines = ofSplitString(input,"\n");
+    for (int l=0; l<lines.size(); l++) {
+        vector<string> words = ofSplitString(lines[l]," ");
+        int strWidth=0;
+        for (int w=0; w<words.size(); w++) {
+            int nextWidth = font ? font->stringWidth(words[w]+"i") : words[w].length()+1;
+            
+            if (strWidth+nextWidth < maxWidth) {
+                strWidth+=nextWidth;
+            } else {
+                strWidth=nextWidth;
+                words[w] = "\n" + words[w];
+            }
+        }
+        lines[l] = ofJoinString(words, " ");
+    }
+    return ofJoinString(lines, "\n");
+}
+
+int ofxGetMultiByteStringLength(string s) { //corrected for 3 bytes UTF-8 characters
+    //count the number of special chars (3 bytes) in the string
+    int total = 0;
+    for (int i=0; i<s.length(); i++) {
+        if (s.at(i)<0) total++;
+    }
+    total/=3; //3 bytes per special char
+    return s.length()-total*2; //subtract 2 of the length for each special char
 }
