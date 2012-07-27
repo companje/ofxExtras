@@ -781,14 +781,14 @@ ofRectangle ofxGetBoundingBox(vector<ofPoint*> points) {
     return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
 }
 
-void ofxSimplifyPath(ofPath &path, int iterations, float amount) {
+void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance) { //wat doet amount?? should be distance???
     for (int iteration=0; iteration<iterations; iteration++) {
         vector<ofSubPath> &subpaths = path.getSubPaths();
         for (int i=0; i<subpaths.size(); i++) {
             vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
             if (commands.size()<amount) continue;
             for (int j=0; j<commands.size()-1; j++) {
-                if (commands[j].to.distance(commands[j+1].to)<3) {
+                if (commands[j].to.distance(commands[j+1].to)<distance) {
                     commands[j].to = (commands[j].to+commands[j+1].to)/2;
                     commands.erase(commands.begin()+j+1);
                 }

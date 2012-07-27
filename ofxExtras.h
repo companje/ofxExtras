@@ -146,7 +146,7 @@ string ofxGetFilenameFromUrl(string url);
 
 ofPoint ofxGetCenterOfMass(vector<ofPoint*> points);
 ofRectangle ofxGetBoundingBox(vector<ofPoint*> points);
-void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15);
+void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float distance=1);
 vector<ofPoint*> ofxGetPointsFromPath(ofPath &path);
 
 ofVec3f ofxToCartesian(float lat, float lon);
