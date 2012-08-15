@@ -148,7 +148,7 @@ string ofxGetFilenameFromUrl(string url);
 
 ofPoint ofxGetCenterOfMass(vector<ofPoint*> points);
 ofRectangle ofxGetBoundingBox(vector<ofPoint*> points);
-void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15);
+void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float distance=1);
 vector<ofPoint*> ofxGetPointsFromPath(ofPath &path);
 
 ofVec3f ofxToCartesian(float lat, float lon);
@@ -162,3 +162,9 @@ typedef struct { float lat; float lon; } ofxLatLon;
 ofxLatLon ofxToLatLon(ofQuaternion q);
 
 string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font=0);
+
+ofMesh ofxCreateGeoSphere(int stacks=32, int slices=32);
+void ofxAutoColorMesh(ofMesh &mesh);
+
+bool ofxOnTimeIntervalSeconds(int s);
+
