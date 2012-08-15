@@ -878,3 +878,62 @@ int ofxGetMultiByteStringLength(string s) { //corrected for 3 bytes UTF-8 charac
     total/=3; //3 bytes per special char
     return s.length()-total*2; //subtract 2 of the length for each special char
 }
+
+ofMesh ofxCreateGeoSphere(int stacks, int slices) {
+    ofMesh mesh;
+    
+    //add vertices
+    mesh.addVertex(ofVec3f(0,0,1));
+    
+    for (int i=1; i<stacks; i++) {
+        double phi = PI * double(i)/stacks;
+        double cosPhi = cos(phi);
+        double sinPhi = sin(phi);
+        for (int j=0; j<slices; j++) {
+            double theta = TWO_PI * double(j)/slices;
+            mesh.addVertex(ofVec3f(cos(theta)*sinPhi, sin(theta)*sinPhi, cosPhi));
+        }
+    }
+    mesh.addVertex(ofVec3f(0,0,-1));
+    
+    //top row triangle fan 
+    for (int j=1; j<slices; j++) {
+        mesh.addTriangle(0,j,j+1); 
+    }
+    mesh.addTriangle(0,slices,1);
+    
+    //triangle strips
+    for (int i=0; i < stacks-2; i++) {
+        int top = i*slices + 1;
+        int bottom = (i+1)*slices + 1;
+        
+        for (int j=0; j<slices-1; j++) {
+            mesh.addTriangle(bottom+j, bottom+j+1, top+j+1);
+            mesh.addTriangle(bottom+j, top+j+1, top+j);
+        }
+        
+        mesh.addTriangle(bottom+slices-1, bottom, top);
+        mesh.addTriangle(bottom+slices-1, top, top+slices-1);
+    }
+    
+    //bottom row triangle fan
+    int last = mesh.getNumVertices()-1;
+    for (int j=last-1; j>last-slices; j--) {
+        mesh.addTriangle(last,j,j-1);
+    }
+    mesh.addTriangle(last,last-slices,last-1);
+    
+    return mesh;
+}
+
+void ofxAutoColorMesh(ofMesh &mesh) {
+    for (int i=0; i<mesh.getNumVertices(); i++) {
+        ofVec3f v = mesh.getVertex(i).normalized();    
+        mesh.addColor(ofFloatColor(v.x,v.y,v.z));
+    }
+}
+
+bool ofxOnTimeIntervalSeconds(int s) { 
+    int fps = 30; //ofGetFrameRate should be constant for this to work well
+    return (ofGetFrameNum() % (s*fps) == 0);
+}

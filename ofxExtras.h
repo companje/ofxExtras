@@ -162,3 +162,9 @@ typedef struct { float lat; float lon; } ofxLatLon;
 ofxLatLon ofxToLatLon(ofQuaternion q);
 
 string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font=0);
+
+ofMesh ofxCreateGeoSphere(int stacks=32, int slices=32);
+void ofxAutoColorMesh(ofMesh &mesh);
+
+bool ofxOnTimeIntervalSeconds(int s);
+
