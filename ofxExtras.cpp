@@ -154,11 +154,10 @@ string ofxFormatDateTime(time_t rawtime, string format) {
 
 time_t ofxParseDateTime(string datetime, string format) {
     //http://www.cplusplus.com/reference/clibrary/ctime/strftime/
-//    struct tm tm[1] = {{0}};
-//    strptime(datetime.c_str(), format.c_str(), tm);
-//    return mktime(tm);
     ofLogError("ofxParseDateTime not implemented in this version of ofxExtras");
-    return 0;
+    //    struct tm tm[1] = {{0}};
+    //    strptime(datetime.c_str(), format.c_str(), tm);
+    //    return mktime(tm);
 }
 
 //vector<string> ofxParseString(string str, string format) {
@@ -676,7 +675,11 @@ void ofxAssert(bool condition, string message) {
 
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
     float delta = fabs(stopAngle-startAngle);
+<<<<<<< HEAD
     if (delta<.001) return; //don't draw if arc to small
+=======
+    if (delta<.00001) return; //don't draw if arc to small
+>>>>>>> febac11557f528b31404031f163f785af020dbf2
     int n = 200 * delta/TWO_PI; //a full circle=200 segments
     if (n==0) return;
     glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
@@ -812,6 +815,10 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
     return points;
 }
 
+ofQuaternion ofxToQuaternion(ofxLatLon ll) {
+    return ofxToQuaternion(ll.lat, ll.lon);
+}
+
 ofQuaternion ofxToQuaternion(float lat, float lon) {
     ofQuaternion q;
     q *= ofQuaternion(lat, ofVec3f(1,0,0));
@@ -883,10 +890,10 @@ int ofxGetMultiByteStringLength(string s) { //corrected for 3 bytes UTF-8 charac
 
 ofMesh ofxCreateGeoSphere(int stacks, int slices) {
     ofMesh mesh;
-    
+
     //add vertices
     mesh.addVertex(ofVec3f(0,0,1));
-    
+
     for (int i=1; i<stacks; i++) {
         double phi = PI * double(i)/stacks;
         double cosPhi = cos(phi);
@@ -897,45 +904,59 @@ ofMesh ofxCreateGeoSphere(int stacks, int slices) {
         }
     }
     mesh.addVertex(ofVec3f(0,0,-1));
-    
-    //top row triangle fan 
+
+    //top row triangle fan
     for (int j=1; j<slices; j++) {
-        mesh.addTriangle(0,j,j+1); 
+        mesh.addTriangle(0,j,j+1);
     }
     mesh.addTriangle(0,slices,1);
-    
+
     //triangle strips
     for (int i=0; i < stacks-2; i++) {
         int top = i*slices + 1;
         int bottom = (i+1)*slices + 1;
-        
+
         for (int j=0; j<slices-1; j++) {
             mesh.addTriangle(bottom+j, bottom+j+1, top+j+1);
             mesh.addTriangle(bottom+j, top+j+1, top+j);
         }
-        
+
         mesh.addTriangle(bottom+slices-1, bottom, top);
         mesh.addTriangle(bottom+slices-1, top, top+slices-1);
     }
-    
+
     //bottom row triangle fan
     int last = mesh.getNumVertices()-1;
     for (int j=last-1; j>last-slices; j--) {
         mesh.addTriangle(last,j,j-1);
     }
     mesh.addTriangle(last,last-slices,last-1);
-    
+
     return mesh;
 }
 
 void ofxAutoColorMesh(ofMesh &mesh) {
     for (int i=0; i<mesh.getNumVertices(); i++) {
-        ofVec3f v = mesh.getVertex(i).normalized();    
+        ofVec3f v = mesh.getVertex(i).normalized();
         mesh.addColor(ofFloatColor(v.x,v.y,v.z));
     }
 }
 
-bool ofxOnTimeIntervalSeconds(int s) { 
+bool ofxOnTimeIntervalSeconds(int s) {
     int fps = 30; //ofGetFrameRate should be constant for this to work well
     return (ofGetFrameNum() % (s*fps) == 0);
+}
+
+bool ofxIsWindows() {
+    #ifdef WIN32
+    return true;
+    #else
+    return false;
+    #endif
+}
+
+template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
+    int index = ofClamp(normIndex * list.size(), 0,list.size()-1);
+    if (list.size()==0) return T();
+    return list[index];
 }
