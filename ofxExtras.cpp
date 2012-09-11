@@ -675,11 +675,7 @@ void ofxAssert(bool condition, string message) {
 
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
     float delta = fabs(stopAngle-startAngle);
-<<<<<<< HEAD
-    if (delta<.001) return; //don't draw if arc to small
-=======
     if (delta<.00001) return; //don't draw if arc to small
->>>>>>> febac11557f528b31404031f163f785af020dbf2
     int n = 200 * delta/TWO_PI; //a full circle=200 segments
     if (n==0) return;
     glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
