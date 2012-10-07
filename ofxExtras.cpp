@@ -607,12 +607,24 @@ ofPoint ofxGetPointOnCircle(float angle, float radius) { //radians
     return p;
 }
 
+int ofxMakeEven(int v, int add) {
+    return (v%2==0) ? v : v+add;
+}
+
+int ofxMakeOdd(int v, int add) {
+    return (v%2==0) ? v+add : v;
+}
+
 ofPoint ofxGetMouse() {
     return ofPoint(ofGetMouseX(),ofGetMouseY());
 }
 
 ofPoint ofxGetMouseFromCenter() {
     return ofxGetMouse()-ofxGetCenter();
+}
+
+ofPoint ofxGetPreviousMouse() {
+    return ofPoint(ofGetPreviousMouseX(), ofGetPreviousMouseY());
 }
 
 int ofxIndex(float x, float y, float w) {
@@ -780,6 +792,10 @@ ofRectangle ofxGetBoundingBox(vector<ofPoint*> points) {
         yMax = max(yMax,pt.y);
     }
     return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
+}
+
+ofRectangle ofxScaleRectangle(ofRectangle rect, float s) {
+    return ofRectangle(rect.x*s,rect.y*s,rect.width*s,rect.height*s);
 }
 
 void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance) { //wat doet amount?? should be distance???

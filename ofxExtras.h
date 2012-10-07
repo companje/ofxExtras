@@ -13,10 +13,10 @@
 #include "Poco/URI.h"
 #include "Poco/URIStreamOpener.h"
 
-#define ofxBeginApp() class ofApp : public ofBaseApp { public: 
+#define ofxBeginApp() class ofApp : public ofBaseApp { public:
 #define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow,500,500,OF_WINDOW); ofRunApp(new ofApp); }
 #define ofxPrintln(str) cout << str << endl;
-#define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p; 
+#define foreach(t,v) for(typeof(v.begin()) p=v.begin(); p!=v.end(); p++) { typeof(*p) &t=*p;
 #define endfor }
 #define TAU TWO_PI
 
@@ -45,6 +45,8 @@ ofColor ofxToColor(string hex);
 ofColor ofxToColor(unsigned char r, unsigned char g, unsigned char b);
 ofMatrix4x4 ofxToMatrix4x4(string str);
 ofMesh ofxCreateGeoSphere(int stacks=32, int slices=32);
+ofPoint ofxGetMouse();
+ofPoint ofxGetPreviousMouse();
 ofPoint ofxGetCenter();
 ofPoint ofxGetCenterOfMass(vector<ofPoint*> points);
 ofPoint ofxGetMouseFromCenter();
@@ -56,6 +58,7 @@ ofQuaternion ofxToQuaternion(string str);
 ofRectangle ofxGetBoundingBox(vector<ofPoint*> points);
 ofRectangle ofxToRectangle(ofVec4f v);
 ofRectangle ofxToRectangle(string str);
+ofRectangle ofxScaleRectangle(ofRectangle rect, float s);
 ofVec2f ofxToVec2f(string str);
 ofVec3f ofxMouseToSphere(float x, float y); //-0.5 ... 0.5
 ofVec3f ofxMouseToSphere(ofVec2f v); //-0.5 ... 0.5
@@ -139,3 +142,5 @@ void ofxSetTexture(ofTexture &texture);
 void ofxSetWindowRect(ofRectangle w);
 void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float distance=1);
 void ofxTranslate(ofVec3f v);
+int ofxMakeEven(int v, int add=1);
+int ofxMakeOdd(int v, int add=1); // you can choose -1 to subtract
