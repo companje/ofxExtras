@@ -154,10 +154,10 @@ string ofxFormatDateTime(time_t rawtime, string format) {
 
 time_t ofxParseDateTime(string datetime, string format) {
     //http://www.cplusplus.com/reference/clibrary/ctime/strftime/
-    ofxExit("ofxParseDateTime not implemented");
-//    struct tm tm[1] = {{0}};
-//    strptime(datetime.c_str(), format.c_str(), tm);
-//    return mktime(tm);
+    ofLogError("ofxParseDateTime not implemented in this version of ofxExtras");
+    //    struct tm tm[1] = {{0}};
+    //    strptime(datetime.c_str(), format.c_str(), tm);
+    //    return mktime(tm);
 }
 
 //vector<string> ofxParseString(string str, string format) {
