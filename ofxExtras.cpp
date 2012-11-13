@@ -96,7 +96,7 @@ string ofxGetFilenameFromUrl(string url) {
 vector<string> ofxLoadStrings(string url) {
     using Poco::URI;
     URI uri(url);
-    
+
     if (uri.isRelative()) {
         string filename = uri.getPathAndQuery();
         vector<string> lines;
@@ -106,7 +106,7 @@ vector<string> ofxLoadStrings(string url) {
         string line;
         while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
         f.close();
-        return lines;        
+        return lines;
     } else {
         try {
             string str;
@@ -120,7 +120,7 @@ vector<string> ofxLoadStrings(string url) {
             session.sendRequest(request);
             Poco::Net::HTTPResponse response;
             istream& rs = session.receiveResponse(response);
-            
+
             if (response.getStatus() == 200) {
                 Poco::StreamCopier::copyToString(rs, str);
                 return ofSplitString(str,"\n",true,true);
@@ -160,9 +160,10 @@ string ofxFormatDateTime(time_t rawtime, string format) {
 
 time_t ofxParseDateTime(string datetime, string format) {
     //http://www.cplusplus.com/reference/clibrary/ctime/strftime/
-    struct tm tm[1] = {{0}};
-    strptime(datetime.c_str(), format.c_str(), tm);
-    return mktime(tm);
+    ofLogError("ofxParseDateTime not implemented in this version of ofxExtras");
+    //    struct tm tm[1] = {{0}};
+    //    strptime(datetime.c_str(), format.c_str(), tm);
+    //    return mktime(tm);
 }
 
 //vector<string> ofxParseString(string str, string format) {
@@ -194,7 +195,7 @@ void ofxDisableTexture() {
 #ifdef GL_TEXTURE_RECTANGLE_ARB
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
 #endif
-    
+
 }
 
 // trim trailing spaces
@@ -259,7 +260,7 @@ void ofxSetColor(ofColor c) {
 void ofxSetColorHSB(int h, int s, int b, int a) {
     unsigned char hsv[] = {h,s,b};
     unsigned char rgb[] = {0,0,0};
-    
+
     if (hsv[2] == 0); // black
 	else if (hsv[1] == 0) { rgb[0]=b;  rgb[1]=b; rgb[2]=b; } // grays
     else {
@@ -504,9 +505,9 @@ void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
     float cx = img.getTextureReference().getWidth()/2; //center of image
     float cy = img.getTextureReference().getHeight()/2; //center of image
     float step = TWO_PI/slices; //size of a slice in radians
-    
+
     img.getTextureReference().bind();
-    
+
     glBegin(GL_TRIANGLE_FAN);
     for (float f=0; f<TWO_PI; f+=step) {
         glTexCoord2f(cx,cy);
@@ -612,12 +613,24 @@ ofPoint ofxGetPointOnCircle(float angle, float radius) { //radians
     return p;
 }
 
+int ofxMakeEven(int v, int add) {
+    return (v%2==0) ? v : v+add;
+}
+
+int ofxMakeOdd(int v, int add) {
+    return (v%2==0) ? v+add : v;
+}
+
 ofPoint ofxGetMouse() {
     return ofPoint(ofGetMouseX(),ofGetMouseY());
 }
 
 ofPoint ofxGetMouseFromCenter() {
     return ofxGetMouse()-ofxGetCenter();
+}
+
+ofPoint ofxGetPreviousMouse() {
+    return ofPoint(ofGetPreviousMouseX(), ofGetPreviousMouseY());
 }
 
 int ofxIndex(float x, float y, float w) {
@@ -635,16 +648,16 @@ float ofxLerp(float start, float end, float amt) {
 void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
     float tw = tex.getTextureReference().getWidth();
     float th = tex.getTextureReference().getHeight();
-    
+
     ofMesh mesh;
-    
+
     for (int x=0; x<=cols; x++) {
         float f = float(x)/cols;
         ofPoint vTop(ofxLerp(lt,rt,f));
         ofPoint vBottom(ofxLerp(lb,rb,f));
         ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
         ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
-        
+
         for (int y=0; y<=rows; y++) {
             float f = float(y)/rows;
             ofPoint v = ofxLerp(vTop,vBottom,f);
@@ -652,14 +665,14 @@ void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPo
             mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
         }
     }
-    
+
     for (float y=0; y<rows; y++) {
         for (float x=0; x<cols; x++) {
             mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
             mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
         }
     }
-    
+
     tex.getTextureReference().bind();
     mesh.draw();
     tex.getTextureReference().unbind();
@@ -680,11 +693,11 @@ void ofxAssert(bool condition, string message) {
 
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
     float delta = fabs(stopAngle-startAngle);
-    if (delta<FLT_EPSILON) return; //don't draw if arc to small
+    if (delta<.00001) return; //don't draw if arc to small
     int n = 200 * delta/TWO_PI; //a full circle=200 segments
     if (n==0) return;
     glBegin(GL_TRIANGLE_STRIP); //GL_TRIANGLE_STRIP); //change to GL_LINE_LOOP);  for hollow
-    for (int i=0; i<=n; i++) { 
+    for (int i=0; i<=n; i++) {
         float f = -ofMap(i,0,n,startAngle,stopAngle);
         float x1 = innerRadius * cos(f);
         float y1 = innerRadius * sin(f);
@@ -698,7 +711,7 @@ void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float s
 
 void ofxArc(float radius, float startAngle, float stopAngle, int detail) { //radians
     glBegin(GL_LINE_STRIP);
-    for (int i=0,n=detail; i<=n; i++) { 
+    for (int i=0,n=detail; i<=n; i++) {
         float f = -ofMap(i,0,n,startAngle,stopAngle);
         float x = radius * cos(f);
         float y = radius * sin(f);
@@ -714,26 +727,26 @@ void ofxDrawSphere(float radius, int segments )
 {
 	if( segments < 0 )
 		return;
-    
+
 	float *verts = new float[(segments+1)*2*3];
 	float *normals = new float[(segments+1)*2*3];
 	float *texCoords = new float[(segments+1)*2*2];
-    
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glVertexPointer( 3, GL_FLOAT, 0, verts );
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 	glTexCoordPointer( 2, GL_FLOAT, 0, texCoords );
 	glEnableClientState( GL_NORMAL_ARRAY );
 	glNormalPointer( GL_FLOAT, 0, normals );
-    
+
 	for( int j = 0; j < segments / 2; j++ ) {
 		float theta1 = j * 2 * 3.14159f / segments - ( 3.14159f / 2.0f );
 		float theta2 = (j + 1) * 2 * 3.14159f / segments - ( 3.14159f / 2.0f );
-        
+
 		for( int i = 0; i <= segments; i++ ) {
 			ofVec3f e, p;
 			float theta3 = i * 2 * 3.14159f / segments;
-            
+
 			e.x = cos( theta1 ) * cos( theta3 );
 			e.y = sin( theta1 );
 			e.z = cos( theta1 ) * sin( theta3 );
@@ -741,7 +754,7 @@ void ofxDrawSphere(float radius, int segments )
 			normals[i*3*2+0] = e.x; normals[i*3*2+1] = e.y; normals[i*3*2+2] = e.z;
 			texCoords[i*2*2+0] = 0.999f - i / (float)segments; texCoords[i*2*2+1] = 0.999f - 2 * j / (float)segments;
 			verts[i*3*2+0] = p.x; verts[i*3*2+1] = p.y; verts[i*3*2+2] = p.z;
-            
+
 			e.x = cos( theta2 ) * cos( theta3 );
 			e.y = sin( theta2 );
 			e.z = cos( theta2 ) * sin( theta3 );
@@ -752,11 +765,11 @@ void ofxDrawSphere(float radius, int segments )
 		}
 		glDrawArrays( GL_TRIANGLE_STRIP, 0, (segments + 1)*2 );
 	}
-    
+
 	glDisableClientState( GL_VERTEX_ARRAY );
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	glDisableClientState( GL_NORMAL_ARRAY );
-    
+
 	delete [] verts;
 	delete [] normals;
 	delete [] texCoords;
@@ -787,6 +800,10 @@ ofRectangle ofxGetBoundingBox(vector<ofPoint*> points) {
     return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
 }
 
+ofRectangle ofxScaleRectangle(ofRectangle rect, float s) {
+    return ofRectangle(rect.x*s,rect.y*s,rect.width*s,rect.height*s);
+}
+
 void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance) { //wat doet amount?? should be distance???
     for (int iteration=0; iteration<iterations; iteration++) {
         vector<ofSubPath> &subpaths = path.getSubPaths();
@@ -814,6 +831,10 @@ vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
         }
     }
     return points;
+}
+
+ofQuaternion ofxToQuaternion(ofxLatLon ll) {
+    return ofxToQuaternion(ll.lat, ll.lon);
 }
 
 ofQuaternion ofxToQuaternion(float lat, float lon) {
@@ -862,7 +883,7 @@ string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font) {
         int strWidth=0;
         for (int w=0; w<words.size(); w++) {
             int nextWidth = font ? font->stringWidth(words[w]+"i") : words[w].length()+1;
-            
+
             if (strWidth+nextWidth < maxWidth) {
                 strWidth+=nextWidth;
             } else {
@@ -883,4 +904,77 @@ int ofxGetMultiByteStringLength(string s) { //corrected for 3 bytes UTF-8 charac
     }
     total/=3; //3 bytes per special char
     return s.length()-total*2; //subtract 2 of the length for each special char
+}
+
+ofMesh ofxCreateGeoSphere(int stacks, int slices) {
+    ofMesh mesh;
+
+    //add vertices
+    mesh.addVertex(ofVec3f(0,0,1));
+
+    for (int i=1; i<stacks; i++) {
+        double phi = PI * double(i)/stacks;
+        double cosPhi = cos(phi);
+        double sinPhi = sin(phi);
+        for (int j=0; j<slices; j++) {
+            double theta = TWO_PI * double(j)/slices;
+            mesh.addVertex(ofVec3f(cos(theta)*sinPhi, sin(theta)*sinPhi, cosPhi));
+        }
+    }
+    mesh.addVertex(ofVec3f(0,0,-1));
+
+    //top row triangle fan
+    for (int j=1; j<slices; j++) {
+        mesh.addTriangle(0,j,j+1);
+    }
+    mesh.addTriangle(0,slices,1);
+
+    //triangle strips
+    for (int i=0; i < stacks-2; i++) {
+        int top = i*slices + 1;
+        int bottom = (i+1)*slices + 1;
+
+        for (int j=0; j<slices-1; j++) {
+            mesh.addTriangle(bottom+j, bottom+j+1, top+j+1);
+            mesh.addTriangle(bottom+j, top+j+1, top+j);
+        }
+
+        mesh.addTriangle(bottom+slices-1, bottom, top);
+        mesh.addTriangle(bottom+slices-1, top, top+slices-1);
+    }
+
+    //bottom row triangle fan
+    int last = mesh.getNumVertices()-1;
+    for (int j=last-1; j>last-slices; j--) {
+        mesh.addTriangle(last,j,j-1);
+    }
+    mesh.addTriangle(last,last-slices,last-1);
+
+    return mesh;
+}
+
+void ofxAutoColorMesh(ofMesh &mesh) {
+    for (int i=0; i<mesh.getNumVertices(); i++) {
+        ofVec3f v = mesh.getVertex(i).normalized();
+        mesh.addColor(ofFloatColor(v.x,v.y,v.z));
+    }
+}
+
+bool ofxOnTimeIntervalSeconds(int s) {
+    int fps = 30; //ofGetFrameRate should be constant for this to work well
+    return (ofGetFrameNum() % (s*fps) == 0);
+}
+
+bool ofxIsWindows() {
+    #ifdef WIN32
+    return true;
+    #else
+    return false;
+    #endif
+}
+
+template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
+    int index = ofClamp(normIndex * list.size(), 0,list.size()-1);
+    if (list.size()==0) return T();
+    return list[index];
 }
