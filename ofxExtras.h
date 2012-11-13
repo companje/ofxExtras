@@ -20,7 +20,7 @@
 #define endfor }
 
 #define ofxBeginApp() class ofApp : public ofBaseApp { public: 
-#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow,500,500,OF_WINDOW); ofRunApp(new ofApp); }
+#define ofxEndApp() }; int main() { ofSetupOpenGL(new ofAppGlutWindow,1280,800,OF_WINDOW); ofRunApp(new ofApp); }
 
 enum ofxAlign { LEFT, CENTER, RIGHT };
 int ofxToInteger(string str);
@@ -72,6 +72,8 @@ string ofxReplaceString(string input, string replace, string by);
 string ofxFormatDateTime(time_t rawtime, string format);
 time_t ofxParseDateTime(string datetime, string format);
 time_t ofxGetDateTime();
+string ofxGetIsoDateTime();
+
 //vector<string> ofxParseString(string str, string format);
 
 ///template<typename T> T ofxFromList(vector<T> &list, float normIndex);

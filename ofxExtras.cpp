@@ -81,6 +81,8 @@ string ofxUrlToSafeLocalPath(string url) {
     filename = ofxTrimString(filename);
     filename = ofxReplaceString(filename, "http://", "");
     filename = ofxReplaceString(filename, "/", "-");
+    filename = ofxReplaceString(filename, " ", "_");
+    filename = ofxReplaceString(filename, ":", ".");
     //filename = "images/"+filename;
     return filename;
 }
@@ -143,6 +145,10 @@ void ofxSaveStrings(string filename, vector<string> lines) {
     ofstream file(ofToDataPath(filename).c_str(),ios::out);
     for (int i=0; i<lines.size(); i++) file << lines[i] << endl;
     file.close();
+}
+
+string ofxGetIsoDateTime() {
+    return ofxFormatDateTime(ofxGetDateTime(), "%Y-%m-%d %X");
 }
 
 string ofxFormatDateTime(time_t rawtime, string format) {
