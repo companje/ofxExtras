@@ -972,9 +972,9 @@ bool ofxIsWindows() {
     return false;
     #endif
 }
-
-template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
-    int index = ofClamp(normIndex * list.size(), 0,list.size()-1);
-    if (list.size()==0) return T();
-    return list[index];
-}
+//
+//template<typename T> T ofxFromList(vector<T> &list, float normIndex) {
+//    int index = ofClamp(normIndex * list.size(), 0,list.size()-1);
+//    if (list.size()==0) return T();
+//    return list[index];
+//}

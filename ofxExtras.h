@@ -78,7 +78,7 @@ string ofxGetFilenameFromUrl(string url);
 string ofxGetHostName();
 string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
 string ofxReplaceString(string input, string replace, string by);
-<<<<<<< HEAD
+
 string ofxFormatDateTime(time_t rawtime, string format);
 time_t ofxParseDateTime(string datetime, string format);
 time_t ofxGetDateTime();
@@ -101,9 +101,8 @@ void ofxSetHexColor(int hexColor, int a=255);
 void ofxSetColor(ofColor c);
 void ofxSetColorHSB(int h, int s, int b, int a=255);
 float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
-bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
+//bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 
-=======
 string ofxStringAfterFirst(string str, string key);
 string ofxStringBeforeFirst(string str, string key);
 string ofxToHexString(int value, int digits);
@@ -112,7 +111,6 @@ string ofxToString(char ch);
 string ofxToString(float f);
 string ofxToString(int value);
 string ofxToString(ofColor c);
->>>>>>> 223313b5ff311a8161761561ba80e471e2114cd6
 string ofxToString(ofMatrix4x4 m);
 string ofxToString(ofQuaternion q);
 string ofxToString(ofRectangle value);
@@ -161,9 +159,9 @@ void ofxScale(ofVec3f v);
 void ofxSerialWrite(ofSerial &serial, string str);
 void ofxSerialWriteLine(ofSerial &serial, string str);
 void ofxSetColor(ofColor c);
-void ofxSetColorHSB(int h, int s, int b, int a=255);
+//void ofxSetColorHSB(int h, int s, int b, int a=255);
 void ofxSetCursor(bool bVisible);
-void ofxSetHexColor(int hexColor, int a=255);
+//void ofxSetHexColor(int hexColor, int a=255);
 void ofxSetTexture(ofBaseHasTexture &material);
 void ofxSetTexture(ofTexture &texture);
 void ofxSetWindowRect(ofRectangle w);
