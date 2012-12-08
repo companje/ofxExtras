@@ -488,20 +488,25 @@ ofMatrix4x4 ofxToMatrix4x4(string s) {
 }
 
 void ofxQuadricSphere(float radius, int resolution) {
+#ifndef TARGET_OPENGLES
     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
     gluQuadricTexture(quadric, GL_TRUE);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluSphere(quadric, radius, resolution, resolution);
+#endif
 }
 
 void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution) {
+#ifndef TARGET_OPENGLES
     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
     gluQuadricTexture(quadric, GL_TRUE);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluDisk(quadric, innerRadius, outerRadius, resolution, resolution);
+#endif
 }
 
 void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
+#ifndef TARGET_OPENGLES
     float cx = img.getTextureReference().getWidth()/2; //center of image
     float cy = img.getTextureReference().getHeight()/2; //center of image
     float step = TWO_PI/slices; //size of a slice in radians
@@ -518,6 +523,7 @@ void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
         glVertex2f(r*sin(f+step), r*cos(f+step));
     }
     glEnd();
+#endif
 }
 
 void ofxEnableDepthTest() {
@@ -529,6 +535,7 @@ void ofxDisableDepthTest() {
 }
 
 string ofxGetSerialString(ofSerial &serial, char until) {
+#ifndef TARGET_OPENGLES
     static string str;
     stringstream ss;
     char ch;
@@ -545,9 +552,11 @@ string ofxGetSerialString(ofSerial &serial, char until) {
     } else {
         return "";
     }
+#endif
 }
 
 bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
+#ifndef TARGET_OPENGLES
     static string tmpstr; //cannot use output_str unless it's a member var of testApp. we want also support for local vars in functions. OR, we can try if this is really the case and needed
     stringstream ss;
     char ch;
@@ -561,15 +570,20 @@ bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
         tmpstr = "";
     }
     return tmpstr!="";
+#endif
 }
 
 void ofxSerialWrite(ofSerial &serial, string str) {
+#ifndef TARGET_OPENGLES
     serial.writeBytes((unsigned char*)str.c_str(), str.size());
+#endif
 }
 
 void ofxSerialWriteLine(ofSerial &serial, string str) {
+#ifndef TARGET_OPENGLES
     str+="\n";
     serial.writeBytes((unsigned char*)str.c_str(), str.size());
+#endif
 }
 
 ofVec3f ofxMouseToSphere(float x, float y) {  //-0.5 ... +0.5
@@ -691,7 +705,9 @@ void ofxAssert(bool condition, string message) {
     }
 }
 
+
 void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float stopAngle) {  //radians
+#ifndef TARGET_OPENGLES
     float delta = fabs(stopAngle-startAngle);
     if (delta<.00001) return; //don't draw if arc to small
     int n = 200 * delta/TWO_PI; //a full circle=200 segments
@@ -707,9 +723,11 @@ void ofxArcStrip(float innerRadius, float outerRadius, float startAngle, float s
         glVertex2f(x2,y2);
     }
     glEnd();
+#endif
 }
 
 void ofxArc(float radius, float startAngle, float stopAngle, int detail) { //radians
+#ifndef TARGET_OPENGLES
     glBegin(GL_LINE_STRIP);
     for (int i=0,n=detail; i<=n; i++) {
         float f = -ofMap(i,0,n,startAngle,stopAngle);
@@ -718,6 +736,7 @@ void ofxArc(float radius, float startAngle, float stopAngle, int detail) { //rad
         glVertex2f(x,y);
     }
     glEnd();
+#endif
 }
 
 // from Cinder
@@ -821,6 +840,20 @@ void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance)
     path.flagShapeChanged();
 }
 
+vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path) {
+    vector<ofPolyline> polylines;
+    vector<ofSubPath> &subpaths = path.getSubPaths();
+    for (int i=0; i<subpaths.size(); i++) {
+        ofPolyline poly;
+        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+        for (int j=0; j<commands.size()-1; j++) {
+            poly.addVertex(commands[i].to);
+        }
+        polylines.push_back(poly);
+    }
+    return polylines;
+}
+
 vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
     vector<ofPoint*> points;
     vector<ofSubPath> &subpaths = path.getSubPaths();
@@ -859,7 +892,9 @@ ofVec3f ofxToCartesian(ofQuaternion q) {
 }
 
 void ofxDrawVertex(ofVec3f v) {
+#ifndef TARGET_OPENGLES
     glVertex3f(v.x,v.y,v.z);
+#endif
 }
 
 ofxLatLon ofxToLatLon(ofQuaternion q) {
