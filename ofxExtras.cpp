@@ -528,49 +528,49 @@ void ofxDisableDepthTest() {
     glDisable(GL_DEPTH_TEST);
 }
 
-string ofxGetSerialString(ofSerial &serial, char until) {
-    static string str;
-    stringstream ss;
-    char ch;
-    int ttl=1000;
-    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
-        ss << ch;
-    }
-    str+=ss.str();
-    if (ch==until) {
-        string tmp=str;
-        str="";
-        return ofxTrimString(tmp);
-    } else {
-        return "";
-    }
-}
-
-bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
-    static string tmpstr; //cannot use output_str unless it's a member var of testApp. we want also support for local vars in functions. OR, we can try if this is really the case and needed
-    stringstream ss;
-    char ch;
-    int ttl=1000;
-    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-        ss << ch;
-    }
-    tmpstr+=ss.str();
-    if (ch==until) {
-        output_str = tmpstr;
-        tmpstr = "";
-    }
-    return tmpstr!="";
-}
-
-void ofxSerialWrite(ofSerial &serial, string str) {
-    serial.writeBytes((unsigned char*)str.c_str(), str.size());
-}
-
-void ofxSerialWriteLine(ofSerial &serial, string str) {
-    str+="\n";
-    serial.writeBytes((unsigned char*)str.c_str(), str.size());
-}
+//string ofxGetSerialString(ofSerial &serial, char until) {
+//    static string str;
+//    stringstream ss;
+//    char ch;
+//    int ttl=1000;
+//    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+//        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+//        ss << ch;
+//    }
+//    str+=ss.str();
+//    if (ch==until) {
+//        string tmp=str;
+//        str="";
+//        return ofxTrimString(tmp);
+//    } else {
+//        return "";
+//    }
+//}
+//
+//bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
+//    static string tmpstr; //cannot use output_str unless it's a member var of testApp. we want also support for local vars in functions. OR, we can try if this is really the case and needed
+//    stringstream ss;
+//    char ch;
+//    int ttl=1000;
+//    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+//        ss << ch;
+//    }
+//    tmpstr+=ss.str();
+//    if (ch==until) {
+//        output_str = tmpstr;
+//        tmpstr = "";
+//    }
+//    return tmpstr!="";
+//}
+//
+//void ofxSerialWrite(ofSerial &serial, string str) {
+//    serial.writeBytes((unsigned char*)str.c_str(), str.size());
+//}
+//
+//void ofxSerialWriteLine(ofSerial &serial, string str) {
+//    str+="\n";
+//    serial.writeBytes((unsigned char*)str.c_str(), str.size());
+//}
 
 ofVec3f ofxMouseToSphere(float x, float y) {  //-0.5 ... +0.5
     ofVec3f v(x,y);
@@ -810,7 +810,7 @@ void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance)
         for (int i=0; i<subpaths.size(); i++) {
             vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
             if (commands.size()<amount) continue;
-            for (int j=0; j<commands.size()-1; j++) {
+            for (int j=1; j<commands.size()-2; j++) { //laat eerste en laatste punt met rust
                 if (commands[j].to.distance(commands[j+1].to)<distance) {
                     commands[j].to = (commands[j].to+commands[j+1].to)/2;
                     commands.erase(commands.begin()+j+1);

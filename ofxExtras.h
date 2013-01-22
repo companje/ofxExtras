@@ -24,7 +24,7 @@ typedef struct { float lat, lon; } ofxLatLon;
 
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 bool ofxFileExists(string filename);
-bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
+//bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
 bool ofxIsWindows();
 bool ofxMouseMoved(); //this one should be fixed to update prev only once per update/draw not per call
 bool ofxOnTimeIntervalSeconds(int s);
@@ -76,7 +76,7 @@ string ofxFormatString(string format, string s);
 string ofxGetFileExtension(string filename);
 string ofxGetFilenameFromUrl(string url);
 string ofxGetHostName();
-string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
+//string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
 string ofxReplaceString(string input, string replace, string by);
 
 string ofxFormatDateTime(time_t rawtime, string format);
@@ -156,8 +156,8 @@ void ofxSaveString(string filename, string str);
 void ofxSaveStrings(string filename, vector<string> lines);
 void ofxScale(float scale);
 void ofxScale(ofVec3f v);
-void ofxSerialWrite(ofSerial &serial, string str);
-void ofxSerialWriteLine(ofSerial &serial, string str);
+//void ofxSerialWrite(ofSerial &serial, string str);
+//void ofxSerialWriteLine(ofSerial &serial, string str);
 void ofxSetColor(ofColor c);
 //void ofxSetColorHSB(int h, int s, int b, int a=255);
 void ofxSetCursor(bool bVisible);
@@ -169,3 +169,4 @@ void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float dis
 void ofxTranslate(ofVec3f v);
 int ofxMakeEven(int v, int add=1);
 int ofxMakeOdd(int v, int add=1); // you can choose -1 to subtract
+
