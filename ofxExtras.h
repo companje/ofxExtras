@@ -22,6 +22,7 @@
 
 typedef struct { float lat, lon; } ofxLatLon;
 
+bool ofxContains(vector<string> strings, string key);
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 bool ofxFileExists(string filename);
 //bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
@@ -73,6 +74,7 @@ string ofxAddTrailingString(string str, string trail);
 string ofxFormatDateTime(time_t rawtime, string format);
 string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
+unsigned int ofxGetFileAge(string filename);
 string ofxGetFileExtension(string filename);
 string ofxGetFilenameFromUrl(string url);
 string ofxGetHostName();

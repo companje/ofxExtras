@@ -1,7 +1,20 @@
+#include <sys/stat.h>
 #include "ofxExtras.h"
 
 void ofxNotice(string msg) {
     ofLog(OF_LOG_NOTICE, msg);
+}
+
+unsigned int ofxGetFileAge(string filename) {
+    struct stat fileinfo;
+    int rv = stat(filename.c_str(), &fileinfo);
+    if (rv < 0 && errno == ENOENT) { //ignore if file does not exist
+        return 0;
+    } else if (rv < 0) {
+        ofLogError() << "could not stat '" << filename << "' (" << strerror(errno) << ")";
+        return -1;
+    }
+    return ofGetUnixTime() - fileinfo.st_mtimespec.tv_sec;
 }
 
 string ofxGetFileExtension(string filename) {
@@ -98,7 +111,7 @@ vector<string> ofxLoadStrings(string url) {
     URI uri(url);
 
     if (uri.isRelative()) {
-        string filename = uri.getPathAndQuery();
+        string filename = url; //uri.getPathAndQuery();
         vector<string> lines;
         filename = ofToDataPath(filename);
         if (!ofxFileExists(filename)) { ofLogError() << "ofxLoadStrings: File not found: " << filename; return lines; }
@@ -224,6 +237,10 @@ string ofxStringAfterFirst(string str, string key) {
 	return (string::npos != startpos) ? str.substr(startpos+key.size()) : str;
 }
 
+bool ofxContains(vector<string> keys, string key) {
+    return std::find(keys.begin(), keys.end(), key)!=keys.end();
+}
+    
 float ofxDist(float ax, float ay, float az, float bx, float by, float bz) {
     return ofVec3f(ax,ay,az).distance(ofVec3f(bx,by,bz));
     //return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
