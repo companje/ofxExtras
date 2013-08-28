@@ -94,7 +94,7 @@ string ofxGetFilenameFromUrl(string url) {
 vector<string> ofxLoadStrings(string url) {
     using Poco::URI;
     URI uri(url);
-    
+
     if (uri.isRelative()) {
         string filename = uri.getPathAndQuery();
         vector<string> lines;
@@ -104,7 +104,7 @@ vector<string> ofxLoadStrings(string url) {
         string line;
         while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
         f.close();
-        return lines;        
+        return lines;
     } else {
         try {
             string str;
@@ -118,7 +118,7 @@ vector<string> ofxLoadStrings(string url) {
             session.sendRequest(request);
             Poco::Net::HTTPResponse response;
             istream& rs = session.receiveResponse(response);
-            
+
             if (response.getStatus() == 200) {
                 Poco::StreamCopier::copyToString(rs, str);
                 return ofSplitString(str,"\n",true,true);
@@ -484,6 +484,25 @@ void ofxDisableDepthTest() {
 }
 
 string ofxGetSerialString(ofSerial &serial, char until) {
+    static string str;
+    stringstream ss;
+    char ch;
+    int ttl=1000;
+    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+        ss << ch;
+    }
+    str+=ss.str();
+    if (ch==until) {
+        string tmp=str;
+        str="";
+        return ofxTrimString(tmp);
+    } else {
+        return "";
+    }
+}
+
+string ofxGetSerialString2(ofSerial &serial, char until) {
     static string str;
     stringstream ss;
     char ch;

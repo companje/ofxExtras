@@ -103,6 +103,7 @@ void ofxEnableDepthTest();
 void ofxDisableDepthTest();
 
 string ofxGetSerialString(ofSerial &serial, char until='\0');
+string ofxGetSerialString2(ofSerial &serial, char until='\0');
 bool ofxGetSerialString(ofSerial &serial, string &output_str, char until='\0');
 void ofxSerialWrite(ofSerial &serial, string str);
 void ofxSerialWriteLine(ofSerial &serial, string str);
