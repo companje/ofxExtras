@@ -5,6 +5,7 @@ void ofxNotice(string msg) {
     ofLog(OF_LOG_NOTICE, msg);
 }
 
+#ifdef TARGET_OS_X
 unsigned int ofxGetFileAge(string filename) {
     struct stat fileinfo;
     int rv = stat(filename.c_str(), &fileinfo);
@@ -16,6 +17,7 @@ unsigned int ofxGetFileAge(string filename) {
     }
     return ofGetUnixTime() - fileinfo.st_mtimespec.tv_sec;
 }
+#endif
 
 string ofxGetFileExtension(string filename) {
     int pos = filename.rfind('.');
@@ -240,7 +242,7 @@ string ofxStringAfterFirst(string str, string key) {
 bool ofxContains(vector<string> keys, string key) {
     return std::find(keys.begin(), keys.end(), key)!=keys.end();
 }
-    
+
 float ofxDist(float ax, float ay, float az, float bx, float by, float bz) {
     return ofVec3f(ax,ay,az).distance(ofVec3f(bx,by,bz));
     //return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
@@ -551,24 +553,44 @@ void ofxDisableDepthTest() {
     glDisable(GL_DEPTH_TEST);
 }
 
-//string ofxGetSerialString(ofSerial &serial, char until) {
-//    static string str;
-//    stringstream ss;
-//    char ch;
-//    int ttl=1000;
-//    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-//        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
-//        ss << ch;
-//    }
-//    str+=ss.str();
-//    if (ch==until) {
-//        string tmp=str;
-//        str="";
-//        return ofxTrimString(tmp);
-//    } else {
-//        return "";
-//    }
-//}
+string ofxGetSerialString(ofSerial &serial, char until) {
+    static string str;
+    stringstream ss;
+    char ch;
+    int ttl=1000;
+    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+        ss << ch;
+    }
+    str+=ss.str();
+    if (ch==until) {
+        string tmp=str;
+        str="";
+        return ofxTrimString(tmp);
+    } else {
+        return "";
+    }
+}
+
+string ofxGetSerialString2(ofSerial &serial, char until) {
+    static string str;
+    stringstream ss;
+    char ch;
+    int ttl=1000;
+    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+        ss << ch;
+    }
+    str+=ss.str();
+    if (ch==until) {
+        string tmp=str;
+        str="";
+        return ofxTrimString(tmp);
+    } else {
+        return "";
+    }
+}
+
 //
 //bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
 //    static string tmpstr; //cannot use output_str unless it's a member var of testApp. we want also support for local vars in functions. OR, we can try if this is really the case and needed
@@ -886,48 +908,49 @@ ofRectangle ofxScaleRectangle(ofRectangle rect, float s) {
     return ofRectangle(rect.x*s,rect.y*s,rect.width*s,rect.height*s);
 }
 
-void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance) { //wat doet amount?? should be distance???
-    for (int iteration=0; iteration<iterations; iteration++) {
-        vector<ofSubPath> &subpaths = path.getSubPaths();
-        for (int i=0; i<subpaths.size(); i++) {
-            vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
-            if (commands.size()<amount) continue;
-            for (int j=1; j<commands.size()-2; j++) { //laat eerste en laatste punt met rust
-                if (commands[j].to.distance(commands[j+1].to)<distance) {
-                    commands[j].to = (commands[j].to+commands[j+1].to)/2;
-                    commands.erase(commands.begin()+j+1);
-                }
-            }
-        }
-    }
-    path.flagShapeChanged();
-}
+////of008 has no subpaths
+//void ofxSimplifyPath(ofPath &path, int iterations, float amount, float distance) { //wat doet amount?? should be distance???
+//    for (int iteration=0; iteration<iterations; iteration++) {
+//        vector<ofSubPath> &subpaths = path.getSubPaths();
+//        for (int i=0; i<subpaths.size(); i++) {
+//            vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+//            if (commands.size()<amount) continue;
+//            for (int j=1; j<commands.size()-2; j++) { //laat eerste en laatste punt met rust
+//                if (commands[j].to.distance(commands[j+1].to)<distance) {
+//                    commands[j].to = (commands[j].to+commands[j+1].to)/2;
+//                    commands.erase(commands.begin()+j+1);
+//                }
+//            }
+//        }
+//    }
+//    path.flagShapeChanged();
+//}
 
-vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path) {
-    vector<ofPolyline> polylines;
-    vector<ofSubPath> &subpaths = path.getSubPaths();
-    for (int i=0; i<subpaths.size(); i++) {
-        ofPolyline poly;
-        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
-        for (int j=0; j<commands.size()-1; j++) {
-            poly.addVertex(commands[i].to);
-        }
-        polylines.push_back(poly);
-    }
-    return polylines;
-}
-
-vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
-    vector<ofPoint*> points;
-    vector<ofSubPath> &subpaths = path.getSubPaths();
-    for (int i=0; i<subpaths.size(); i++) {
-        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
-        for (int j=0; j<commands.size(); j++) {
-            points.push_back(&commands[j].to);
-        }
-    }
-    return points;
-}
+//vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path) {
+//    vector<ofPolyline> polylines;
+//    vector<ofSubPath> &subpaths = path.getSubPaths();
+//    for (int i=0; i<subpaths.size(); i++) {
+//        ofPolyline poly;
+//        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+//        for (int j=0; j<commands.size()-1; j++) {
+//            poly.addVertex(commands[i].to);
+//        }
+//        polylines.push_back(poly);
+//    }
+//    return polylines;
+//}
+//
+//vector<ofPoint*> ofxGetPointsFromPath(ofPath &path) {
+//    vector<ofPoint*> points;
+//    vector<ofSubPath> &subpaths = path.getSubPaths();
+//    for (int i=0; i<subpaths.size(); i++) {
+//        vector<ofSubPath::Command> &commands = subpaths[i].getCommands();
+//        for (int j=0; j<commands.size(); j++) {
+//            points.push_back(&commands[j].to);
+//        }
+//    }
+//    return points;
+//}
 
 ofQuaternion ofxToQuaternion(ofxLatLon ll) {
     return ofxToQuaternion(ll.lat, ll.lon);

@@ -25,7 +25,6 @@ typedef struct { float lat, lon; } ofxLatLon;
 bool ofxContains(vector<string> strings, string key);
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 bool ofxFileExists(string filename);
-//bool ofxGetSerialString(ofSerial &serial, string &output_str, char until);
 bool ofxIsWindows();
 bool ofxMouseMoved(); //this one should be fixed to update prev only once per update/draw not per call
 bool ofxOnTimeIntervalSeconds(int s);
@@ -74,11 +73,16 @@ string ofxAddTrailingString(string str, string trail);
 string ofxFormatDateTime(time_t rawtime, string format);
 string ofxFormatString(string format, int number);
 string ofxFormatString(string format, string s);
+
+#ifdef TARGET_OS_X
 unsigned int ofxGetFileAge(string filename);
+#endif
+
 string ofxGetFileExtension(string filename);
 string ofxGetFilenameFromUrl(string url);
 string ofxGetHostName();
-//string ofxGetSerialString(ofSerial &serial, char until); //no default because it's confusing
+string ofxGetSerialString(ofSerial &serial, char until);
+string ofxGetSerialString2(ofSerial &serial, char until);
 string ofxReplaceString(string input, string replace, string by);
 
 string ofxFormatDateTime(time_t rawtime, string format);
@@ -167,7 +171,7 @@ void ofxSetCursor(bool bVisible);
 void ofxSetTexture(ofBaseHasTexture &material);
 void ofxSetTexture(ofTexture &texture);
 void ofxSetWindowRect(ofRectangle w);
-void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float distance=1);
+//void ofxSimplifyPath(ofPath &path, int iterations=10, float amount=15, float distance=1); //of008 has no subpaths
 vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path);
 void ofxTranslate(ofVec3f v);
 int ofxMakeEven(int v, int add=1);
