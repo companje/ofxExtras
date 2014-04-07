@@ -506,6 +506,15 @@ ofMatrix4x4 ofxToMatrix4x4(string s) {
     return ofMatrix4x4(mat);
 }
 
+vector<float> ofxToFloatVector(string s, string delimiter) {
+  vector<float> f;
+  vector<string> items = ofSplitString(s,delimiter);
+  for (int i=0; i<items.size(); i++) {
+    f.push_back(ofToFloat(items.at(i)));
+  }
+  return f;
+}
+
 void ofxQuadricSphere(float radius, int resolution) {
 #ifndef TARGET_OPENGLES
     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
@@ -995,6 +1004,14 @@ ofxLatLon ofxToLatLon(ofQuaternion q) {
     float lon = ofRadToDeg(-atan2(c.y,c.x))-90;
     if (lon<-180) lon+=360;
     return (ofxLatLon){lat,lon};
+}
+
+ofxLatLon ofxToLatLon(string s) {
+  ofVec2f v = ofxToVec2f(s);
+	ofxLatLon ll;
+  ll.lat = v.x;
+  ll.lon = v.y;
+  return ll;
 }
 
 string ofxWordWrap(string input, int maxWidth, ofTrueTypeFont *font) {
