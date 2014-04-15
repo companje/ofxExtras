@@ -181,5 +181,5 @@ int ofxMakeOdd(int v, int add=1); // you can choose -1 to subtract
 vector<ofPoint> getConvexHull(vector<ofPoint> points);
 bool isRightTurn(ofPoint a, ofPoint b, ofPoint c);
 bool lexicalComparison(const ofPoint& v1, const ofPoint& v2);
-
+bool ofxLoadImage(ofImage &img, string filename);
 

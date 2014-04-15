@@ -1180,7 +1180,13 @@ vector<ofPoint> getConvexHull(vector<ofPoint> points) {
     return hull;
 }
 
-
+bool ofxLoadImage(ofImage &img, string filename) {
+  if (!ofxFileExists(filename)) {
+    ofxExit("ofxLoadImage: File not found: " + filename);
+  } else {
+    img.loadImage(filename);
+  }
+}
 
 
 
