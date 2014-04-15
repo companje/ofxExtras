@@ -178,4 +178,8 @@ vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path);
 void ofxTranslate(ofVec3f v);
 int ofxMakeEven(int v, int add=1);
 int ofxMakeOdd(int v, int add=1); // you can choose -1 to subtract
+vector<ofPoint> getConvexHull(vector<ofPoint> points);
+bool isRightTurn(ofPoint a, ofPoint b, ofPoint c);
+bool lexicalComparison(const ofPoint& v1, const ofPoint& v2);
+
 
