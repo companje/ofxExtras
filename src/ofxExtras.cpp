@@ -26,12 +26,13 @@ string ofxGetFileExtension(string filename) {
 }
 
 bool ofxFileExists(string filename) {
-    ofFile f(filename);
-    return f.exists();
-    //	ifstream inp;
-    //	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
-    //	inp.close();
-    //	return !inp.fail();
+  if (filename=="") return false;
+  ofFile f(filename);
+  return f.exists();
+  //	ifstream inp;
+  //	inp.open(ofToDataPath(filename).c_str(), ifstream::in);
+  //	inp.close();
+  //	return !inp.fail();
 }
 
 string ofxAddTrailingSlash(string foldername) {
@@ -1181,6 +1182,8 @@ vector<ofPoint> getConvexHull(vector<ofPoint> points) {
 }
 
 bool ofxLoadImage(ofImage &img, string filename) {
+  cout << ofxFileExists(filename) << endl;
+  ofxExit();
   if (!ofxFileExists(filename)) {
     ofxExit("ofxLoadImage: File not found: " + filename);
   } else {
