@@ -1182,8 +1182,6 @@ vector<ofPoint> getConvexHull(vector<ofPoint> points) {
 }
 
 bool ofxLoadImage(ofImage &img, string filename) {
-  cout << ofxFileExists(filename) << endl;
-  ofxExit();
   if (!ofxFileExists(filename)) {
     ofxExit("ofxLoadImage: File not found: " + filename);
   } else {
