@@ -240,6 +240,12 @@ string ofxStringAfterFirst(string str, string key) {
 	return (string::npos != startpos) ? str.substr(startpos+key.size()) : str;
 }
 
+string ofxStringBeforeLast(string str, string key) {
+  vector<string> items = ofSplitString(str, key);
+  items.pop_back();
+  return ofJoinString(items, key);
+}
+
 bool ofxContains(vector<string> keys, string key) {
     return std::find(keys.begin(), keys.end(), key)!=keys.end();
 }
@@ -914,6 +920,19 @@ ofRectangle ofxGetBoundingBox(vector<ofPoint*> points) {
     return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
 }
 
+ofRectangle ofxGetBoundingBox(vector<ofPoint> &points) {
+  if (points.size()<1) return ofRectangle();
+  float xMin=9999,xMax=-9999,yMin=9999,yMax=-9999;
+  for (int i=0; i<points.size(); i++) {
+    ofPoint &pt = points[i];
+    xMin = min(xMin,pt.x);
+    xMax = max(xMax,pt.x);
+    yMin = min(yMin,pt.y);
+    yMax = max(yMax,pt.y);
+  }
+  return ofRectangle(xMin,yMin,xMax-xMin,yMax-yMin);
+}
+
 ofRectangle ofxScaleRectangle(ofRectangle rect, float s) {
     return ofRectangle(rect.x*s,rect.y*s,rect.width*s,rect.height*s);
 }
@@ -1130,55 +1149,58 @@ bool isRightTurn(ofPoint a, ofPoint b, ofPoint c) {
     return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) >= 0;
 }
 
-vector<ofPoint> getConvexHull(vector<ofPoint> points) {
-    ofPoint h1,h2,h3;
+//vector<ofPoint>
+ofPolyline ofxGetConvexHull(vector<ofPoint> points) {
+  if (points.size()<3) return ofPolyline();
+      
+  ofPoint h1,h2,h3;
 
-    sort(points.begin(), points.end(), lexicalComparison);
+  sort(points.begin(), points.end(), lexicalComparison);
 
-    vector<ofPoint> hull;
+  vector<ofPoint> hull;
 
-    hull.push_back(points.at(0));
-    hull.push_back(points.at(1));
+  hull.push_back(points.at(0));
+  hull.push_back(points.at(1));
 
-    int currentPoint = 2;
-    int direction = 1;
+  int currentPoint = 2;
+  int direction = 1;
 
-    for (int i=0; i<1000; i++) { //max 1000 tries
+  for (int i=0; i<1000; i++) { //max 1000 tries
 
-      hull.push_back(points.at(currentPoint));
+    hull.push_back(points.at(currentPoint));
 
-      // look at the turn direction in the last three points
-      h1 = hull.at(hull.size()-3);
+    // look at the turn direction in the last three points
+    h1 = hull.at(hull.size()-3);
+    h2 = hull.at(hull.size()-2);
+    h3 = hull.at(hull.size()-1);
+
+    // while there are more than two points in the hull
+    // and the last three points do not make a right turn
+    while (!isRightTurn(h1, h2, h3) && hull.size() > 2) {
+
+      // remove the middle of the last three points
+      hull.erase(hull.end() - 2);
+
+      if (hull.size() >= 3) {
+        h1 = hull.at(hull.size()-3);
+      }
       h2 = hull.at(hull.size()-2);
       h3 = hull.at(hull.size()-1);
-
-      // while there are more than two points in the hull
-      // and the last three points do not make a right turn
-      while (!isRightTurn(h1, h2, h3) && hull.size() > 2) {
-
-        // remove the middle of the last three points
-        hull.erase(hull.end() - 2);
-
-        if (hull.size() >= 3) {
-          h1 = hull.at(hull.size()-3);
-        }
-        h2 = hull.at(hull.size()-2);
-        h3 = hull.at(hull.size()-1);
-      }
-
-      // going through left-to-right calculates the top hull
-      // when we get to the end, we reverse direction
-      // and go back again right-to-left to calculate the bottom hull
-      if (currentPoint == points.size() -1 || currentPoint == 0) {
-        direction = direction * -1;
-      }
-
-      currentPoint+= direction;
-
-      if (hull.front()==hull.back()) break;
     }
 
-    return hull;
+    // going through left-to-right calculates the top hull
+    // when we get to the end, we reverse direction
+    // and go back again right-to-left to calculate the bottom hull
+    if (currentPoint == points.size() -1 || currentPoint == 0) {
+      direction = direction * -1;
+    }
+
+    currentPoint+= direction;
+
+    if (hull.front()==hull.back()) break;
+  }
+
+  return ofPolyline(hull);
 }
 
 bool ofxLoadImage(ofImage &img, string filename) {

@@ -56,6 +56,7 @@ ofQuaternion ofxToQuaternion(float lat, float lon);
 ofQuaternion ofxToQuaternion(ofxLatLon ll);
 ofQuaternion ofxToQuaternion(string str);
 ofRectangle ofxGetBoundingBox(vector<ofPoint*> points);
+ofRectangle ofxGetBoundingBox(vector<ofPoint> &points);
 ofRectangle ofxToRectangle(ofVec4f v);
 ofRectangle ofxToRectangle(string str);
 ofRectangle ofxScaleRectangle(ofRectangle rect, float s);
@@ -113,6 +114,8 @@ float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
 
 string ofxStringAfterFirst(string str, string key);
 string ofxStringBeforeFirst(string str, string key);
+string ofxStringBeforeLast(string str, string key);
+
 string ofxToHexString(int value, int digits);
 string ofxToString(bool value);
 string ofxToString(char ch);
@@ -178,7 +181,7 @@ vector<ofPolyline> ofxGetPolylinesFromPath(ofPath path);
 void ofxTranslate(ofVec3f v);
 int ofxMakeEven(int v, int add=1);
 int ofxMakeOdd(int v, int add=1); // you can choose -1 to subtract
-vector<ofPoint> getConvexHull(vector<ofPoint> points);
+ofPolyline ofxGetConvexHull(vector<ofPoint> points);
 bool isRightTurn(ofPoint a, ofPoint b, ofPoint c);
 bool lexicalComparison(const ofPoint& v1, const ofPoint& v2);
 bool ofxLoadImage(ofImage &img, string filename);
