@@ -240,6 +240,11 @@ string ofxStringAfterFirst(string str, string key) {
 	return (string::npos != startpos) ? str.substr(startpos+key.size()) : str;
 }
 
+string ofxStringAfterLast(string str, string key) {
+  vector<string> items = ofSplitString(str, key);
+  return items.back();
+}
+
 string ofxStringBeforeLast(string str, string key) {
   vector<string> items = ofSplitString(str, key);
   items.pop_back();
@@ -1028,9 +1033,9 @@ ofxLatLon ofxToLatLon(ofQuaternion q) {
 
 ofxLatLon ofxToLatLon(string s) {
   ofVec2f v = ofxToVec2f(s);
-	ofxLatLon ll;
-  ll.lat = v.x;
-  ll.lon = v.y;
+	ofxLatLon ll(v.x,v.y);
+//  ll.lat = v.x;
+//  ll.lon = v.y;
   return ll;
 }
 
@@ -1152,7 +1157,7 @@ bool isRightTurn(ofPoint a, ofPoint b, ofPoint c) {
 //vector<ofPoint>
 ofPolyline ofxGetConvexHull(vector<ofPoint> points) {
   if (points.size()<3) return ofPolyline();
-      
+
   ofPoint h1,h2,h3;
 
   sort(points.begin(), points.end(), lexicalComparison);

@@ -20,7 +20,12 @@
 #define endfor }
 #define TAU TWO_PI
 
-typedef struct { float lat, lon; } ofxLatLon;
+class ofxLatLon {
+public:
+  ofxLatLon() : lat(0), lon(0) {}
+  ofxLatLon(float lat, float lon) : lat(lat), lon(lon) {}
+  float lat,lon;
+};
 
 bool ofxContains(vector<string> strings, string key);
 bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
@@ -113,6 +118,7 @@ float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
 //bool ofxColorMatch(ofColor a, ofColor b, int tolerance=0);
 
 string ofxStringAfterFirst(string str, string key);
+string ofxStringAfterLast(string str, string key);
 string ofxStringBeforeFirst(string str, string key);
 string ofxStringBeforeLast(string str, string key);
 
