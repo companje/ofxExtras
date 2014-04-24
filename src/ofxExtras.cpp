@@ -1028,7 +1028,7 @@ ofxLatLon ofxToLatLon(ofQuaternion q) {
     float lat = ofRadToDeg(asin(c.z));
     float lon = ofRadToDeg(-atan2(c.y,c.x))-90;
     if (lon<-180) lon+=360;
-    return (ofxLatLon){lat,lon};
+    return ofxLatLon(lat,lon);
 }
 
 ofxLatLon ofxToLatLon(string s) {
