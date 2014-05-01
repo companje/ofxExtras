@@ -1216,5 +1216,10 @@ bool ofxLoadImage(ofImage &img, string filename) {
   }
 }
 
+void ofxAssertFileExists(string filename, string msg) {
+  ofFile file(filename);
+  ofxAssert(ofxFileExists(filename), msg + ": File not found: " + filename);
+}
+
 
 

@@ -191,4 +191,4 @@ ofPolyline ofxGetConvexHull(vector<ofPoint> points);
 bool isRightTurn(ofPoint a, ofPoint b, ofPoint c);
 bool lexicalComparison(const ofPoint& v1, const ofPoint& v2);
 bool ofxLoadImage(ofImage &img, string filename);
-
+void ofxAssertFileExists(string filename, string msg="");
