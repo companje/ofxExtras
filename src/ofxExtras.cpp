@@ -146,7 +146,7 @@ vector<string> ofxLoadStrings(string url) {
                 return lines;
             }
         }  catch (Poco::Exception &e) {
-            ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText());
+            ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText() + " - " + url);
         }
     }
 }
