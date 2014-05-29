@@ -113,7 +113,7 @@ vector<string> ofxLoadStrings(string url) {
     using Poco::URI;
     URI uri(url);
 
-    if (uri.isRelative()) {
+    if (uri.isRelative() || !ofxStringStartsWith(url,"http")) {
         string filename = url; //uri.getPathAndQuery();
         vector<string> lines;
         filename = ofToDataPath(filename);
