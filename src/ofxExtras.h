@@ -23,7 +23,8 @@
 class ofxLatLon {
 public:
   ofxLatLon() : lat(0), lon(0) {}
-  ofxLatLon(float lat, float lon) : lat(lat), lon(lon) {}
+  ofxLatLon(float _lat, float _lon) { set(lat,lon); }
+  void set(float _lat, float _lon) { lat = _lat; lon = _lon; }
   float lat,lon;
 };
 
