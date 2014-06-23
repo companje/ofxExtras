@@ -1221,5 +1221,29 @@ void ofxAssertFileExists(string filename, string msg) {
   ofxAssert(ofxFileExists(filename), msg + ": File not found: " + filename);
 }
 
+void ofxTranslate(ofMesh &mesh, ofVec3f pos) {
+  for (int i=0; i<mesh.getNumVertices(); i++) {
+    mesh.getVertices()[i] += pos;
+  }
+}
 
+void ofxTranslate(ofMesh &mesh, float x, float y, float z) {
+  for (int i=0; i<mesh.getNumVertices(); i++) {
+    mesh.getVertices()[i] += ofVec3f(x,y,z);
+  }
+}
+
+void ofxRotate(ofMesh &mesh, float angle, ofVec3f axis) {
+  for (int i=0; i<mesh.getNumVertices(); i++) {
+    mesh.getVertices()[i].rotate(angle, axis);
+  }
+}
+
+void ofxScale(ofMesh &mesh, float x, float y, float z) {
+  for (int i=0; i<mesh.getNumVertices(); i++) {
+    mesh.getVertices()[i].x *= x;
+    mesh.getVertices()[i].y *= y;
+    mesh.getVertices()[i].z *= z;
+  }
+}
 

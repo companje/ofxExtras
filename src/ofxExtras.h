@@ -37,7 +37,7 @@ bool ofxStringEndsWith(string str, string key);
 bool ofxStringStartsWith(string str, string key);
 bool ofxToBoolean(float f);
 bool ofxToBoolean(string sValue);
-enum ofxAlign { LEFT, CENTER, RIGHT };
+//enum ofxAlign { LEFT, CENTER, RIGHT };
 float ofxDist(float x1, float y1, float z1, float x2, float y2, float z2);
 float ofxGetHeading(ofPoint p, ofPoint anchor=ofPoint(0,0)); //radians
 float ofxLerp(float start, float end, float amt);
@@ -192,3 +192,7 @@ bool isRightTurn(ofPoint a, ofPoint b, ofPoint c);
 bool lexicalComparison(const ofPoint& v1, const ofPoint& v2);
 bool ofxLoadImage(ofImage &img, string filename);
 void ofxAssertFileExists(string filename, string msg="");
+void ofxTranslate(ofMesh &mesh, ofVec3f pos);
+void ofxTranslate(ofMesh &mesh, float x, float y, float z=0);
+void ofxRotate(ofMesh &mesh, float angle, ofVec3f axis);
+void ofxScale(ofMesh &mesh, float x, float y, float z);
