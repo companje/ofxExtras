@@ -23,7 +23,8 @@
 class ofxLatLon {
 public:
   ofxLatLon() : lat(0), lon(0) {}
-  ofxLatLon(float lat, float lon) : lat(lat), lon(lon) {}
+  ofxLatLon(float _lat, float _lon) { set(lat,lon); }
+  void set(float _lat, float _lon) { lat = _lat; lon = _lon; }
   float lat,lon;
 };
 
@@ -45,8 +46,10 @@ int ofxGetMultiByteStringLength(string s); //returns the actual string length in
 int ofxIndex(float x, float y, float w);
 int ofxToInteger(ofColor c);
 int ofxToInteger(string str);
+ofColor ofxToColor(ofVec4f v);
+ofColor ofxToColor(ofVec3f v, int alpha=255);
 ofColor ofxToColor(int hexColor);
-ofColor ofxToColor(string hex);
+ofColor ofxToColor(string s); //parse a color from a string
 ofColor ofxToColor(unsigned char r, unsigned char g, unsigned char b);
 ofMatrix4x4 ofxToMatrix4x4(string str);
 ofMesh ofxCreateGeoSphere(int stacks=32, int slices=32);

@@ -371,16 +371,20 @@ ofColor ofxToColor(int hexColor) {
 	return c;
 }
 
-ofColor ofxToColor(string hex) {
-	return ofxToColor(ofxToInteger(hex));
-}
-
 ofColor ofxToColor(unsigned char r, unsigned char g, unsigned char b) {
 	ofColor c;
 	c.r = r;
 	c.g = g;
 	c.b = b;
 	return c;
+}
+
+ofColor ofxToColor(ofVec4f v) {
+	return ofColor(v.x,v.y,v.z,v.w);
+}
+
+ofColor ofxToColor(ofVec3f v, int alpha) {
+	return ofColor(v.x,v.y,v.z,alpha);
 }
 
 string ofxToHexString(int value, int digits=6) {
@@ -1247,3 +1251,16 @@ void ofxScale(ofMesh &mesh, float x, float y, float z) {
   }
 }
 
+ofColor ofxToColor(string s) {
+  ofColor c;
+  if (ofxStringStartsWith(s,"#")) ofStringReplace(s,"#","0x"); //#123456
+  if (ofxStringStartsWith(s,"0x")) return ofColor::fromHex(ofxToInteger(s)); //0x123456 (hex)
+  else if (ofStringTimesInString(s,",")==3) return ofxToColor(ofxToVec4f(s)); //255,255,255,128 (r,g,b,alpha)
+  else if (ofStringTimesInString(s,",")==2) return ofxToColor(ofxToVec3f(s)); //255,255,255 (r,g,b)
+  else if (ofStringTimesInString(s,",")==1) return ofColor(ofxToVec2f(s).x,ofxToVec2f(s).y); //255,128 (gray,alpha)
+  else if (ofStringTimesInString(s,",")==0) return ofColor(ofxToInteger(s)); //gray
+  else {
+    ofLogError() << "ofxToColor(" << s << ") is not a valid color";
+    return ofColor();
+  }
+}
