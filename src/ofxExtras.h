@@ -199,3 +199,4 @@ void ofxTranslate(ofMesh &mesh, ofVec3f pos);
 void ofxTranslate(ofMesh &mesh, float x, float y, float z=0);
 void ofxRotate(ofMesh &mesh, float angle, ofVec3f axis);
 void ofxScale(ofMesh &mesh, float x, float y, float z);
+void ofxRemoveWindowBorders();
