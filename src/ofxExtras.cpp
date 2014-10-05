@@ -578,43 +578,43 @@ void ofxDisableDepthTest() {
     glDisable(GL_DEPTH_TEST);
 }
 
-string ofxGetSerialString(ofSerial &serial, char until) {
-    static string str;
-    stringstream ss;
-    char ch;
-    int ttl=1000;
-    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
-        ss << ch;
-    }
-    str+=ss.str();
-    if (ch==until) {
-        string tmp=str;
-        str="";
-        return ofxTrimString(tmp);
-    } else {
-        return "";
-    }
-}
-
-string ofxGetSerialString2(ofSerial &serial, char until) {
-    static string str;
-    stringstream ss;
-    char ch;
-    int ttl=1000;
-    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
-        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
-        ss << ch;
-    }
-    str+=ss.str();
-    if (ch==until) {
-        string tmp=str;
-        str="";
-        return ofxTrimString(tmp);
-    } else {
-        return "";
-    }
-}
+//string ofxGetSerialString(ofSerial &serial, char until) {
+//    static string str;
+//    stringstream ss;
+//    char ch;
+//    int ttl=1000;
+//    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+//        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+//        ss << ch;
+//    }
+//    str+=ss.str();
+//    if (ch==until) {
+//        string tmp=str;
+//        str="";
+//        return ofxTrimString(tmp);
+//    } else {
+//        return "";
+//    }
+//}
+//
+//string ofxGetSerialString2(ofSerial &serial, char until) {
+//    static string str;
+//    stringstream ss;
+//    char ch;
+//    int ttl=1000;
+//    while ((ch=serial.readByte())>0 && ttl-->0 && ch!=until) {
+//        //if (ch==OF_SERIAL_ERROR) return "OF_SERIAL_ERROR";
+//        ss << ch;
+//    }
+//    str+=ss.str();
+//    if (ch==until) {
+//        string tmp=str;
+//        str="";
+//        return ofxTrimString(tmp);
+//    } else {
+//        return "";
+//    }
+//}
 
 //
 //bool ofxGetSerialString(ofSerial &serial, string &output_str, char until) {
@@ -1279,4 +1279,14 @@ void ofxRemoveWindowBorders() {
   ::SetWindowLong(m_hWnd, GWL_EXSTYLE, exstyle);
   SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,0,0, SWP_NOSIZE|SWP_NOMOVE);
   #endif
+}
+
+ofRectangle ofxGetBoundingBox(ofPath &path) {
+  ofRectangle rect;
+  for (int i=0; i<path.getOutline().size(); i++) {
+    ofRectangle b = path.getOutline().at(i).getBoundingBox();
+    if (i==0) rect = b;
+    else rect.growToInclude(b);
+  }
+  return rect;
 }
