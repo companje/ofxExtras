@@ -120,7 +120,7 @@ vector<string> ofxLoadStrings(string url) {
         if (!ofxFileExists(filename)) { ofLogError() << "ofxLoadStrings: File not found: " << filename; return lines; }
         ifstream f(filename.c_str(),ios::in);
         string line;
-        while (getline(f,line)) lines.push_back(ofxTrimStringRight(line));
+        while (getline(f,line)) lines.push_back(ofxStringRemoveBOM(ofxTrimStringRight(line)));
         f.close();
         return lines;
     } else {
