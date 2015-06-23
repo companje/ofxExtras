@@ -139,6 +139,7 @@ string ofxToString(ofVec3f v, int precision=7);
 string ofxToString(ofVec4f value);
 string ofxToString(string str);
 string ofxToString(unsigned char ch);
+string ofxStringRemoveBOM(string str);
 string ofxTrimString(string str);
 string ofxTrimStringLeft(string str);
 string ofxTrimStringRight(string str);

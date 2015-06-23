@@ -214,6 +214,12 @@ void ofxDisableTexture() {
 
 }
 
+string ofxStringRemoveBOM(string str) {
+  size_t pos = str.find("\xEF\xBB\xBF");
+  if (pos==0 && pos<str.size()+2) return str.substr(3);
+  else return str;
+}
+
 // trim trailing spaces
 string ofxTrimStringRight(string str) {
     size_t endpos = str.find_last_not_of(" \t\r\n");
