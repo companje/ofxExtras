@@ -198,9 +198,9 @@ time_t ofxGetDateTime() {
     return rawtime;
 }
 
-void ofxSetTexture(ofBaseHasTexture &material) {
-    material.getTextureReference().bind();
-}
+// void ofxSetTexture(ofBaseHasTexture &material) {
+//     material.getTextureReference().bind();
+// }
 
 void ofxSetTexture(ofTexture &texture) {
     texture.bind();
@@ -535,44 +535,44 @@ vector<float> ofxToFloatVector(string s, string delimiter) {
   return f;
 }
 
-void ofxQuadricSphere(float radius, int resolution) {
-#ifndef TARGET_OPENGLES
-    static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
-    gluQuadricTexture(quadric, GL_TRUE);
-    gluQuadricNormals(quadric, GLU_SMOOTH);
-    gluSphere(quadric, radius, resolution, resolution);
-#endif
-}
+// void ofxQuadricSphere(float radius, int resolution) {
+// #ifndef TARGET_OPENGLES
+//     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
+//     gluQuadricTexture(quadric, GL_TRUE);
+//     gluQuadricNormals(quadric, GLU_SMOOTH);
+//     gluSphere(quadric, radius, resolution, resolution);
+// #endif
+// }
 
-void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution) {
-#ifndef TARGET_OPENGLES
-    static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
-    gluQuadricTexture(quadric, GL_TRUE);
-    gluQuadricNormals(quadric, GLU_SMOOTH);
-    gluDisk(quadric, innerRadius, outerRadius, resolution, resolution);
-#endif
-}
+// void ofxQuadricDisk(float innerRadius, float outerRadius, int resolution) {
+// #ifndef TARGET_OPENGLES
+//     static GLUquadricObj *quadric = gluNewQuadric(); //because it's static, it's created only once
+//     gluQuadricTexture(quadric, GL_TRUE);
+//     gluQuadricNormals(quadric, GLU_SMOOTH);
+//     gluDisk(quadric, innerRadius, outerRadius, resolution, resolution);
+// #endif
+// }
 
-void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
-#ifndef TARGET_OPENGLES
-    float cx = img.getTextureReference().getWidth()/2; //center of image
-    float cy = img.getTextureReference().getHeight()/2; //center of image
-    float step = TWO_PI/slices; //size of a slice in radians
+// void ofxDrawDisk(ofBaseHasTexture &img,float r, float slices) {
+// #ifndef TARGET_OPENGLES
+//     float cx = img.getTextureReference().getWidth()/2; //center of image
+//     float cy = img.getTextureReference().getHeight()/2; //center of image
+//     float step = TWO_PI/slices; //size of a slice in radians
 
-    img.getTextureReference().bind();
+//     img.getTextureReference().bind();
 
-    glBegin(GL_TRIANGLE_FAN);
-    for (float f=0; f<TWO_PI; f+=step) {
-        glTexCoord2f(cx,cy);
-        glVertex2f(0,0);
-        glTexCoord2f(cx+cx*sin(f), cy+cy*cos(f));
-        glVertex2f(r*sin(f), r*cos(f));
-        glTexCoord2f(cx+cx*sin(f+step), cy+cy*cos(f+step));
-        glVertex2f(r*sin(f+step), r*cos(f+step));
-    }
-    glEnd();
-#endif
-}
+//     glBegin(GL_TRIANGLE_FAN);
+//     for (float f=0; f<TWO_PI; f+=step) {
+//         glTexCoord2f(cx,cy);
+//         glVertex2f(0,0);
+//         glTexCoord2f(cx+cx*sin(f), cy+cy*cos(f));
+//         glVertex2f(r*sin(f), r*cos(f));
+//         glTexCoord2f(cx+cx*sin(f+step), cy+cy*cos(f+step));
+//         glVertex2f(r*sin(f+step), r*cos(f+step));
+//     }
+//     glEnd();
+// #endif
+// }
 
 void ofxEnableDepthTest() {
     glEnable(GL_DEPTH_TEST);
@@ -773,39 +773,39 @@ float ofxLerp(float start, float end, float amt) {
     return start + amt * (end - start);
 }
 
-void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
-    float tw = tex.getTextureReference().getWidth();
-    float th = tex.getTextureReference().getHeight();
+// void ofxQuadWarp(ofBaseHasTexture &tex, ofPoint lt, ofPoint rt, ofPoint rb, ofPoint lb, int rows, int cols) {
+//     float tw = tex.getTextureReference().getWidth();
+//     float th = tex.getTextureReference().getHeight();
 
-    ofMesh mesh;
+//     ofMesh mesh;
 
-    for (int x=0; x<=cols; x++) {
-        float f = float(x)/cols;
-        ofPoint vTop(ofxLerp(lt,rt,f));
-        ofPoint vBottom(ofxLerp(lb,rb,f));
-        ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
-        ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
+//     for (int x=0; x<=cols; x++) {
+//         float f = float(x)/cols;
+//         ofPoint vTop(ofxLerp(lt,rt,f));
+//         ofPoint vBottom(ofxLerp(lb,rb,f));
+//         ofPoint tTop(ofxLerp(ofPoint(0,0),ofPoint(tw,0),f));
+//         ofPoint tBottom(ofxLerp(ofPoint(0,th),ofPoint(tw,th),f));
 
-        for (int y=0; y<=rows; y++) {
-            float f = float(y)/rows;
-            ofPoint v = ofxLerp(vTop,vBottom,f);
-            mesh.addVertex(v);
-            mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
-        }
-    }
+//         for (int y=0; y<=rows; y++) {
+//             float f = float(y)/rows;
+//             ofPoint v = ofxLerp(vTop,vBottom,f);
+//             mesh.addVertex(v);
+//             mesh.addTexCoord(ofxLerp(tTop,tBottom,f));
+//         }
+//     }
 
-    for (float y=0; y<rows; y++) {
-        for (float x=0; x<cols; x++) {
-            mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
-            mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
-        }
-    }
+//     for (float y=0; y<rows; y++) {
+//         for (float x=0; x<cols; x++) {
+//             mesh.addTriangle(ofxIndex(x,y,cols+1), ofxIndex(x+1,y,cols+1), ofxIndex(x,y+1,cols+1));
+//             mesh.addTriangle(ofxIndex(x+1,y,cols+1), ofxIndex(x+1,y+1,cols+1), ofxIndex(x,y+1,cols+1));
+//         }
+//     }
 
-    tex.getTextureReference().bind();
-    mesh.draw();
-    tex.getTextureReference().unbind();
-    mesh.drawVertices();
-}
+//     tex.getTextureReference().bind();
+//     mesh.draw();
+//     tex.getTextureReference().unbind();
+//     mesh.drawVertices();
+// }
 
 void ofxResetTransform(ofNode &node) {
     node.resetTransform();
