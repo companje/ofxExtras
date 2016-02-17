@@ -293,7 +293,7 @@ void ofxSetColor(ofColor c) {
 }
 
 void ofxSetColorHSB(int h, int s, int b, int a) {
-    unsigned char hsv[] = {h,s,b};
+    unsigned char hsv[] = {(unsigned char)h,(unsigned char)s,(unsigned char)b};
     unsigned char rgb[] = {0,0,0};
 
     if (hsv[2] == 0); // black
