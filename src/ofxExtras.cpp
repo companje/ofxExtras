@@ -149,6 +149,7 @@ vector<string> ofxLoadStrings(string url) {
             ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText() + " - " + url);
         }
     }
+  return vector<string>(); //empty
 }
 
 void ofxSaveString(string filename, string str) {
@@ -180,6 +181,7 @@ time_t ofxParseDateTime(string datetime, string format) {
     //    struct tm tm[1] = {{0}};
     //    strptime(datetime.c_str(), format.c_str(), tm);
     //    return mktime(tm);
+  return 0; //fixme
 }
 
 //vector<string> ofxParseString(string str, string format) {
@@ -1016,7 +1018,7 @@ ofVec3f ofxToCartesian(ofQuaternion q) {
     float angle;
     ofVec3f vec;
     q.getRotate(angle, vec);
-    return ofVec3f(0,0,1).rotated(angle, vec);
+    return ofVec3f(0,0,1).getRotated(angle, vec);
 }
 
 void ofxDrawVertex(ofVec3f v) {
@@ -1126,7 +1128,7 @@ ofMesh ofxCreateGeoSphere(int stacks, int slices) {
 
 void ofxAutoColorMesh(ofMesh &mesh) {
     for (int i=0; i<mesh.getNumVertices(); i++) {
-        ofVec3f v = mesh.getVertex(i).normalized();
+        ofVec3f v = mesh.getVertex(i).getNormalized();
         mesh.addColor(ofFloatColor(v.x,v.y,v.z));
     }
 }
@@ -1219,8 +1221,10 @@ ofPolyline ofxGetConvexHull(vector<ofPoint> points) {
 bool ofxLoadImage(ofImage &img, string filename) {
   if (!ofxFileExists(filename)) {
     ofxExit("ofxLoadImage: File not found: " + filename);
+    return false;
   } else {
-    img.loadImage(filename);
+    img.load(filename);
+    return true;
   }
 }
 
