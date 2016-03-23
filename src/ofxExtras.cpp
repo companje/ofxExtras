@@ -110,7 +110,9 @@ string ofxGetFilenameFromUrl(string url) {
 }
 
 vector<string> ofxLoadStrings(string url) {
-    using Poco::URI;
+    cout << "ofxLoadStrings FIXME" << endl;
+    exit(1);
+    /*using Poco::URI;
     URI uri(url);
 
     if (uri.isRelative() || !ofxStringStartsWith(url,"http")) {
@@ -148,7 +150,7 @@ vector<string> ofxLoadStrings(string url) {
         }  catch (Poco::Exception &e) {
             ofxExit("ofxLoadStrings: Problem loading data: " + e.displayText() + " - " + url);
         }
-    }
+    }*/
 }
 
 void ofxSaveString(string filename, string str) {
