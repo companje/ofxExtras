@@ -397,7 +397,7 @@ ofColor ofxToColor(ofVec3f v, int alpha) {
 
 string ofxToHexString(int value, int digits=6) {
 	string result;
-    char buf[digits+1];
+    char buf[10];
 	string format = "%0"+ofToString(digits)+"x";
     sprintf(buf,format.c_str(),value);
     result = buf;
@@ -1275,21 +1275,21 @@ ofColor ofxToColor(string s) {
   }
 }
 
-void ofxRemoveWindowBorders() {
-  #ifdef WIN32
-  HWND m_hWnd = WindowFromDC(wglGetCurrentDC());
-  LONG style = ::GetWindowLong(m_hWnd, GWL_STYLE);
-  style &= ~WS_DLGFRAME;
-  style &= ~WS_CAPTION;
-  style &= ~WS_BORDER;
-  style &= WS_POPUP;
-  LONG exstyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
-  exstyle &= ~WS_EX_DLGMODALFRAME;
-  ::SetWindowLong(m_hWnd, GWL_STYLE, style);
-  ::SetWindowLong(m_hWnd, GWL_EXSTYLE, exstyle);
-  SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,0,0, SWP_NOSIZE|SWP_NOMOVE);
-  #endif
-}
+//void ofxRemoveWindowBorders() {
+//  #ifdef WIN32
+//  HWND m_hWnd = WindowFromDC(wglGetCurrentDC());
+//  LONG style = ::GetWindowLong(m_hWnd, GWL_STYLE);
+//  style &= ~WS_DLGFRAME;
+//  style &= ~WS_CAPTION;
+//  style &= ~WS_BORDER;
+//  style &= WS_POPUP;
+//  LONG exstyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
+//  exstyle &= ~WS_EX_DLGMODALFRAME;
+//  ::SetWindowLong(m_hWnd, GWL_STYLE, style);
+//  ::SetWindowLong(m_hWnd, GWL_EXSTYLE, exstyle);
+//  SetWindowPos(m_hWnd, HWND_TOPMOST, 0,0,0,0, SWP_NOSIZE|SWP_NOMOVE);
+//  #endif
+//}
 
 ofRectangle ofxGetBoundingBox(ofPath &path) {
   ofRectangle rect;
