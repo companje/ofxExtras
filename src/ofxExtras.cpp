@@ -110,9 +110,18 @@ string ofxGetFilenameFromUrl(string url) {
 }
 
 vector<string> ofxLoadStrings(string url) {
-    cout << "ofxLoadStrings FIXME" << endl;
-    exit(1);
-    return vector<string>(); //empty
+    //cout << "ofxLoadStrings FIXME" << endl;
+    //exit(1);
+    //return vector<string>(); //empty
+  string filename = url; //uri.getPathAndQuery();
+  vector<string> lines;
+  filename = ofToDataPath(filename);
+  if (!ofxFileExists(filename)) { ofLogError() << "ofxLoadStrings: File not found: " << filename; return lines; }
+  ifstream f(filename.c_str(),ios::in);
+  string line;
+  while (getline(f,line)) lines.push_back(ofxStringRemoveBOM(ofxTrimStringRight(line)));
+  f.close();
+  return lines;
 }
     /*using Poco::URI;
     URI uri(url);
